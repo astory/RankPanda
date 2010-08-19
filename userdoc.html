@@ -1,0 +1,749 @@
+<HEAD>
+<TITLE>Rank Panda User Manual</TITLE>
+</HEAD>
+
+<BODY BGCOLOR="ffffff">
+
+<CENTER><TABLE>
+<TD ALIGN = MIDDLE><FONT SIZE = 6>Rank Panda User Manual</FONT>
+</TABLE></CENTER>
+
+<A NAME = "top"></A>
+<H2 ALIGN = CENTER>Table of Contents</H2>
+
+<P>
+<A HREF = "#start">Getting Started</A><br>
+<A HREF = "#creatm">Creating Moves</A><br>
+<A HREF = "#draw">Drawing Sets</A><br>
+<A HREF = "#addc">Adding Commands</A><br>
+<A HREF = "#editm">Editing Moves</A><br>
+<A HREF = "#timel">Animation and the Move Progress Bar</A><br>
+<A HREF = "#anim">Export to PDF</A><br>
+<A HREF = "#coml">Quick Reference Commands</A><br>
+<A HREF = "#faq">Frequently Asked Questions</A>
+
+<A NAME = "start"></A>
+<H2 ALIGN = CENTER>Getting Started</H2>
+
+<H3>Welcome to RankPanda</H3>
+Welcome to RankPanda, the program that makes writing drill easier and faster
+than ever before. This user maunal provides both an in depth explanation of
+the features of RankPanda and a set of tutorials to get you started writing
+drill.<br><br>
+
+RankPanda is cross-platform and compatible with current versions of Windows,
+Linux, and Mac operating systems.<br>
+<B>Requirements:<br></B><A HREF =
+	"http://www.python.org/download/releases/2.6/">Python 2.6<br><A HREF =
+		"http://wxpython.org">wxPython</A><br>
+	<A HREF =
+		"http://www.pygame.org/download.shtml">pygame</A><br>
+       	Unicode compatible font<br>Python, its libraries and a working font are included with the RankPanda 
+installation package.
+
+
+<H3>Songs</H3>
+Since each drill is designed to match a piece of music, the song is the
+basic unit of RankPanda. Songs are saved and loaded as .panda files
+containing the information about all the ranks and moves. A song in RankPanda can even be associated with a music file.
+<br><br>
+When RankPanda is started, the program can either create a new song file or open a previously saved song. The new song wizard
+asks for the title of a song, the number of measures, and the timing of the
+song. All three of these fields must be filled. The title must not be blank,
+and the total # of measures must be a number.
+For the count information field, one set of information added lasts until
+the end of the song or until the next measure where either the time
+signature of the song or the counts/step changes. These fields contain the
+default 4 counts per measure and 1 count per step starting from measure 1.
+This is the most common setting, and "half time" is 2 counts per step.<br><br>
+Incorrect count information an be overwritten by entering the measure
+again with new count information. Count information that is the same 
+as the previous count information does not appear, and this can be used to
+delete count/measure information. <br><br>
+
+<CENTER><IMG SRC = "HelpScreens/songwiz.gif"></CENTER>
+<CENTER><FONT FACE = "ARIAL">The song creation wizard with example
+        values.</FONT></CENTER><br><br>
+
+A newly created song contains a single move0, a preset move of length 1
+that starts at count 0.
+This is enough to draw a set of ranks, but to add commands more moves are necessary.
+<br><br>
+<A HREF = "#top">top</A>
+
+<A NAME = "creatm"></A>
+<H2 ALIGN = CENTER>Creating Moves</H2>
+Moves divide a song into more manageable portions. They consist of a set of
+ranks and the lists of commands needed to get the rank into position from
+the previous move.
+
+<H3>Inserting Moves</H3>
+Selecting the "New" option from the "Move" menu opens the new/edit move
+wizard. A move can be inserted anywhere into a song. Once the starting and
+ending measures of move are entered, the name of the move and the number of
+counts in the move are automatically calculated. The move can be named, but
+generally this is not recommended. Unnamed moves default to "Move 0", "Move 1",
+and so on. The start and end measures cannot overlap with that of any other
+move and cannot exceed the number of measures in the song or the move
+cannot be created. Once a move is created, the name, measures, and counts of
+the move are displayed above the grid, and a thumbnail of the move appears
+to the right.<br><br>
+
+<CENTER><IMG SRC = "HelpScreens/move1.gif"></CENTER><br><br>
+<CENTER><FONT FACE = "arial">This new move will be Move 3, which starts
+		after Move 2 ends on measure 32. Move 3 imports ranks from 
+		Move 2.</FONT></CENTER><br><br> 
+
+Ranks can be imported into a move from a previously created either at creation or once a move has been created. <br><br>
+
+After a move has been created, the length and position of a move
+can be edited through the split, merge, and shift options in the move
+menu. <br><br>
+
+Thumbnails of each move appear on the right under Sets/Moves, clicking on any
+thumbnail displays that move on the main grid. A bar of the length of the
+move appears on the move progress bar as well. Once a move has been created,
+ranks can be drawn.<br><br>
+
+<H3>Adding Text to Move</H3>
+There are two options to add text to a move. The Set Text option under the
+move menu adds text that will be printed next to the list of ranks and
+commands when the move is turned into a PDF. Selecting this option again
+allows editing of previously entered text. The Set Text Overwrite will overwrite
+any other text in the PDF page for this move, including rank and command
+information. The Set Text option can replace text entered with this option 
+as well.
+<br><br>
+<A HREF = "#top">top</A>
+
+<A NAME = "draw"></A>
+<H2 ALIGN = CENTER>Drawing Sets</H2>
+Ranks are the representation of lines of Cornell Marching Band members. In
+RankPanda, they are lines or curves with two distinct endpoints. The first
+endpoint drawn is endpoint 0, and it is distinguished by an arrow.
+
+<CENTER><IMG SRC = "HelpScreens/draw1.gif"></CENTER><br>
+<CENTER><FONT FACE = "arial">Here is the grid that represents the football
+		field, the rank is blue as it is being drawn.</FONT></CENTER>
+<H3>Snap to Grid</H3>
+The grid lines on the drawing surface appear every fourth step on the
+football field. The bottom of the grid is considered the front of the
+football field, which the band members usually face.
+
+<H3>Basic Ranks</H3>
+Ranks are drawn by holding the Ctrl button on the key board while clicking and
+dragging with the left mouse button. They initially appear as straight
+lines, and the endpoints are automatically created on the nearest 1 step.
+Left-clickiing and dragging a rank by its middle will move the whole rank
+while preserving its orientation and size, while left-clicking and dragging
+an endpoint will adjust that endpoint of the rank.<br><br>
+
+Clicking on a rank with the left mouse button selects it. Holding the shift
+key allows multiple ranks to be selected. Selected ranks appear <FONT COLOR
+    = "FF0000">red</FONT>.
+Selected ranks can be deleted with the delete button <IMG SRC =
+"icons/deleteicon.png">.<br><br>
+If a rank that has a command list is selected, another rank appears in <FONT
+    COLOR = "7F7F00">gold</FONT>, representing the calculated position of
+the rank based on the length of its command list and the number of counts in
+the previous move. For details, see the <A HREF = "#addc">commands</A>
+section. The Snap End Location button on the toolbar automatically puts
+the rank in the position of the calculated rank.<br><br>
+<CENTER><IMG SRC = "HelpScreens/draw2.gif"></CENTER><br>
+<CENTER><FONT FACE = "arial">Rank a is selected, thus it appears red and 
+		has a "ghost" rank.</FONT></CENTER>
+
+<H3>Curving Ranks</H3>
+Using the right mouse button to click endpoint 0 (the one with the arrow)
+creates a spline point halfway between the two endpoints. Right-clicking any
+point (end or spline point) except endpoint 1 creates a spline point between
+it and the next point on the rank. Left-clicking and dragging the spline
+points causes the rank to become a curve that passes through each spline
+point.<br><br>
+
+Selecting a splined rank and clicking the Zigzag Spline button <IMG SRC =
+"icons/zigzagicon.png"> causes the rank to connect
+the spline points with straight line segments, while clicking the Curved
+Spline button <IMG SRC = "icons/curveicon.png"> causes the rank to curve through the points.
+<br><br>
+<CENTER><IMG SRC = "HelpScreens/draw3.gif"></CENTER><br>
+<CENTER><FONT FACE = "arial">Rank a is a curved rank, while rank b is
+		zigzagged. Both have been selected</FONT></CENTER><br><br>
+To delete a spline point, hold Shift and right-click the spline point.
+
+<H3>Naming Ranks</H3>
+Selecting one rank and pressing a letter, number, or symbol key names that
+rank. Pressing Shift and another key allows for capital letters or other
+symbols.
+<br><br>
+There is also an option to enter a unicode symbol as the name of a rank.
+This is done by selecting the rank and clicking the Unicode button. A pop-up
+opens, allowing either a unicode character a 4 digit unicode value to be 
+entered.<br><br>
+Once a rank is named, it is associated with the rank with the same name in
+the previous move, if such a rank exists. The name of a rank can be changed 
+by selecting it and entering a new character or unicode character.
+<CENTER><IMG SRC = "HelpScreens/draw4.gif"></CENTER><br>
+<CENTER><FONT FACE = "arial">Entering a unicode smiley as a rank name.</FONT></CENTER><br><br>
+<H3>Importing Ranks</H3>
+The import option of the move menu imports the names and positions of the
+ranks from a previous move. Importing ranks into a move clears any ranks
+that may exist in a move, so this should only be done in blank moves.
+<br><br>
+<A HREF = "#top">top</A>
+
+<A NAME = "addc"></A>
+<H2 ALIGN = CENTER>Adding Commands</H2>
+The command list of a rank is the list of commands that gets the rank from
+its position in the previous move to its position in the current move. Each
+command consists of the movement and the number of counts the movement is
+sustained.
+<br><br>
+To add any commands to a rank, the rank must be named, and the name must be
+that of a rank
+that exists in the previous move. This is the move that ends on the measure
+before the measure on which the current move starts. A command list can
+exceed the number of counts in a move, but commands exceeding the length of
+the move cannot be performed, and an <FONT COLOR = "7F7F00">gold</FONT>
+rank is displayed as if those commands did not exist. If a selected rank
+overlaps its "ghost", the entire command list of the rank can be executed
+within the move. The Snap End Location button on the toolbar moves
+the rank to its calculated position, and the Snap Begin Location
+moves the rank in the previous move to a position where the
+calculated rank can reach the current position of the rank. This
+location is a position on the command list of the rank in the current
+position that is close enough that the commands between them can be
+completed during the move. This feature is useful for making moves
+starting from the end of the song and going to the beginning.<br><br>
+
+<CENTER><IMG SRC = "HelpScreens/commands2.gif"></CENTER><br>
+<CENTER><FONT FACE = "ARIAL">Here the command list of rank b is displayed,
+       note that it is too long to be performed in 64 counts.</FONT></CENTER>
+
+<H3>Auto-Generated Commands</H3>
+Once a rank is drawn and named in a move that is adjacent to a previous
+move, RankPanda can automatically generate a command list for that rank. The
+rank must have existed in the previous move. RankPanda automatically
+re-generates the command list whenever the rank is moved.
+<br><br>
+The auto-generated command list attempts to move the rank from the previous
+position to the current as directly as possible with the curve/flatten,
+turn, and slide commands. The autogenerator has no regard for whether these
+movements would cause the rank to collide with others, or whether they would
+look appealing. If the move has more counts than the movements of the
+generated command list, the end of the list is padded with mark time.
+<br>
+The auto-generated commands always appear in the same order.<br>
+1) The rank is flattened, if it was curved previously.<br>
+2) The rank is expanded or contracted to a standard length of 16, by
+whichever endpoint that brings the middle of the rank closer to where it
+should be.<br>
+3) The rank is turned into the correct orientation, using the turn that
+would bring the middle of the rank nearest to its final position.<br>
+4) The rank is moved horizontally.<br>
+5) The rank is moved vertically.<br>
+6) The rank is expanded or condensed to its final length.<br>
+7) The rank is curved, if necessary.<br>
+<br>
+Some of these steps may be skipped, if it is possible. The flatten step for
+curves is skipped if the rank appears with the same curvature in the current
+move as with the previous move. <br><br>
+The autogenerated commands may suffer from rounding errors when generating 
+between rank positions that differ greatly. For this and other limitations
+described above, it is best not to overly rely on the autogeneration for
+designing command lists. The autogenerator is a useful tool nonetheless.
+
+<H3>Editing a Command List</H3>
+To edit the command list of a rank, it must first be locked. Selecting a
+rank and clicking the lock button <IMG SRC = "icons/holdicon.png"> on
+the left toolbar locks a rank, and "*" 
+appears next to the name of the rank to indicate that it is locked.
+<br><br>
+To add a command, select the button matching the command and enter the
+number of counts it should be performed. Some commands have additional
+requirements. Once all the required information is entered, add the command.
+A new command is added either to the bottom of the command list or above a
+selected command in the command list.
+<br><br>
+A command in the list can be selected with a click of the left mouse button.
+Selecting a command causes two more ranks to appear on the grid. The <FONT
+    COLOR = "00FF00">green</FONT> rank represents the position of the rank
+before the command is performed, and the <FONT COLOR="FF00FF">pink</FONT>
+rank shows the position of the rank after that command is performed.
+This provides a quick visual of how the rank will move.<br><br>
+Once a command is selected, the up and down arrow buttons move it up and
+down the list.<br>
+The rename button allows command names such as RightSlide and EXP to be
+renamed, a feature that may be useful for printing. The counts of renamed 
+commands remain unchanged. <br> The split button
+splits a command into two, opening a pop-up where the count the split should
+occur can be entered. For example, splitting a LeftSlide 10 at count 2
+results in a LeftSlide 2 and a LeftSlide 8.<br> The delete button deletes a 
+selected command from the list, after a confirmation prompt.
+<br><br>
+It is possible to perform the same action on the command lists of multiple
+ranks at once, but this only adds the command to the end of the command
+list of the selected ranks. To do this, simply select more than one rank 
+with the Shift key, then lock with * and proceed normally.
+
+<H3>Simple Commands</H3>
+Simple commands consist of the Forward March (FM), Backward March (BM),
+Right Slide (RS), Left Slide (LS), Halt (Hlt), Flatten (Flt), and Mark Time 
+(MT). These commands only require the length field to
+be filled, and will proceed for that number of counts. These commands all
+preserve the length and orientation of a rank. Forward March moves the rank
+down the screen, Backward March moves the rank up the screen. Right and left
+are in relation to the band members, who face the front of the field from
+the back, that is, the bottom of the grid from the top. Thus, a Right Slide
+causes the rank to appear left of its previous position on the screen, and a
+Left Slide causes a rank to appear right of its previous position. Halt and 
+Mark Time meane the rank performs no action for a number of counts. Flatten 
+is actually a special instance of a DTP command, where a curved or zigzag
+rank becomes a straight line between the endpoints.
+
+<H3>Expand and Condense</H3>
+The Expand and Condense commands change the length of a rank, preserving
+orientation. Exp and Cond expand and condense the rank by moving an
+endpoint that is specified in the pop-up. Expand and Condense change the 
+length of the rank by 1 step/count by default.<br><br>
+Note that these commands do not change the positions of any spline points
+that may exist on the rank, which can distort curved ranks.
+
+<CENTER><IMG SRC = "HelpScreens/commands3.gif"></CENTER><br>
+<CENTER><FONT FACE = "arial">The pop-up wizard for condense.</FONT></CENTER>
+<H3>DTPs</H3>
+The DTP is the Direct to Point command, in which a rank moves directly to
+another position.
+Like other commands, the DTP requires the length field to be filled. When
+the DTP button is clicked, a pop-up appears with a drawing surface. This
+drawing surface features a grid like the original and extra two copies of the
+rank. The <FONT COLOR="00FF00">green</FONT> rank appears as the rank does
+before the DTP is started. The <FONT COLOR = "FF00FF">pink</FONT> rank is
+adjustable and should be moved to where the DTP will end. Moving the <FONT
+    COLOR = "FF00FF">pink</FONT> rank works in exactly the same way as
+moving a rank on the main grid, except deletetion. The rank can be moved,
+the endpoints are adjustable, spline points can be added or removed, and the
+rank can be curved or flattened.<br><br>
+Warning: the DTP allows for arbitrarily large movements withing the
+specified number of counts. Required step sizes may be too large to be
+feasible.
+<CENTER><IMG SRC = "HelpScreens/commands4.gif"></CENTER><br>
+<CENTER><FONT FACE = "arial">The window for entering DTP commands.</FONT></CENTER>
+<H3>Curve</H3>
+The Curv command turns a rank that was a straight line into a splined rank
+with the same endpoint positions,
+that is either a curved rank or a zigzag rank. It requires a length of the
+command and the final position the rank should be in. It is basically a
+special instance of the DTP so the button works the same way.
+
+<H3>FTAs</H3>
+The FTA is the Follow the Asshole command, in which the rank follows one of
+its endpoints through a path. The FTA command is similar to the DTP command
+in that it opens a wizard displaying a grid similar to the main drawing
+surface. The selected rank, its "ghost", and a green rank signifying the
+position of the rank at the beginning of the FTA command appear on the grid.
+The path the rank should take is determined by waypoints.
+
+<H3>Gate and Pinwheel Turns</H3>
+The Gate Turn and Pinwheel Turn commands open wizards that require the 
+direction of the turn (clockwise or counterclockwise) and the number of 
+steps the turn takes. 16 steps is a 90 degree turn, 8 steps is a 45 degree
+turn for gate turns. Pinwheel turns are twice as fast, at 8 steps for a 90
+degree turn.
+<br><br>
+<CENTER><IMG SRC = "HelpScreens/commands5.gif"></CENTER><br>
+<CENTER><FONT FACE = "arial">The pop-up wizard for gate turn.</FONT></CENTER>
+<br><br>
+<A HREF = "#top">top</A>
+
+<A NAME = "editm"></A>
+<H2 ALIGN = CENTER>Editing Moves</H2>
+After a move is created, its original specifications are often found to be 
+inadequate. The Split, Merge, and Shift options in the Move menu can be 
+used to split or combine moves, lenghthen or shorten moves, and change the 
+position of a move within the song. The Delete menu option deletes a move 
+and all its content.
+
+<H3>Splitting Moves</H3>
+The Split option opens a pop-up prompt for the count at which to split the 
+currently displayed move.
+The number entered here is the number of counts the move will contain after
+the split operation. The minimum value is 1, the maximum is 1 less than the
+length of the move. Another move that covers the remaining counts of the 
+move is created. If the move to be split has a name in the generic format "Move X", 
+where X is a number, the first split move retains the name and the second 
+gets the name "Move (X+1)". Subsequent moves are also automatically renamed
+if they have the same format.<br><br>
+Spliting a move also splits commands, where possible.
+
+<H3>Merging Moves</H3>
+The Merge option merges the currently selected move with the immediately 
+following move. The combined move takes the name of the current move and 
+contains all the ranks of both moves. The command lists of moves that appear
+in both moves are combined, and the command lists of ranks that appear in 
+the current move but not the following are padded with Mark Time. Moves 
+following the merger get renamed if they do not have custom names.
+
+<H3>Shifting the Position of Moves</H3>
+The Shift option opens a pop-up requesting the number of counts the 
+currently selected move should be shifted. A positive number shifts the 
+move towards the end of the song, a negative number shifts the move towards
+the beginning. Shifting does not work if an existing move is in the way of 
+the intended shift. <br><br>
+Shift requires that the direction chosen be clear of other moves. If a move
+that was contingent to another move gets shifted away, unlocked command 
+lists between them get lost. 
+<br><br>
+<A HREF = "#top">top</A>
+
+<A NAME = "timel"></A>
+<H2 ALIGN = "CENTER">Animation and the Move Progress Bar</H2>
+
+<H3>Animation</H3>
+RankPanda can animate a drill and play a music file along with it. The
+program can animate any arbitrary part of a drill, as long as there is
+something there to animate. To animate a portion of the song, waypoints
+must be set surrounding it. This is done by clicking the Add Waypoint <IMG
+SRC = "icons/addwaypointicon.png"> 
+button, which requests the measure it should be set in, and the time during
+the animation that it should be reached. The waypoints then can be used to
+determine how long moves should last, in terms of real time. Waypoints can 
+be removed with the Remove Waypoint button <IMG SRC =
+"icons/removewaypointicon.png">, which asks for the measure to
+remove the waypoint from. Waypoints are displayed as <FONT COLOR =
+	"blue">blue</FONT> triangles below the move progress bar. The green play
+button <IMG SRC ="icons/playicon.png"> starts the animation at a
+specified count, which can be any count that occurs between two waypoints.
+The red stop button <IMG SRC = "icons/stopicon.png">
+stops an animation that is currently playing.<br><br>
+Adding a waypoint requires a measure in which the waypoint will be added,
+and the time in the song that this waypoint will be reached. Removing a
+waypoint requires only the measure. Hovering the mouse cursor over
+a waypoint on the move progress bar reveals its position within the
+song.<br><br>
+<CENTER><IMG SRC = "HelpScreens/anim2.gif"></CENTER><br><br>
+<CENTER><FONT FACE = "ARIAL">This is the move progress bar during
+		animation, the green triangle is the current progress of
+		the animation. The actual animation of the ranks appears on 
+		the drawing surface. </FONT></CENTER>
+
+<H3>The Move Progress Bar</H3>
+The Move Progress Bar appears below the drawing surface and provides a
+visual connection between the written drill and the song. It also provides 
+another interface for selecting and adding moves. The Bar consists of
+two halves, the top which displays the moves, and the bottom displays the 
+name of the move, count and measure when the mouse hovers over part of the
+progress bar. The top of the move progress bar displays moves as yellow and 
+aqua bars, whose lengths are proportional to the number of counts they last
+in the song. Empty counts (i.e. counts where there is no move) between
+moves appear as red bars. Clicking on a move bar selects that move as the
+active move and highlights the bar, and clicking on a gap opens the new move wizard with the
+start and end measures of the gap filled in automatically. <br><br>
+
+<CENTER><IMG SRC = "HelpScreens/anim1.gif"></CENTER><br><br>
+<CENTER><FONT FACE = "ARIAL">Here Move with a name is the selected move,
+		but the mouse cursor is hovering over count 656, which is in
+		Move 2. The bar is a gap between moves, but the empty
+		counts between the last move and the end of the song has no
+		bar.</FONT></CENTER>
+<br>
+Waypoints  appear as small <FONT COLOR = "BLUE">blue</FONT> triangles under
+the position of the appropriate count on the bar.
+
+<br><br>
+
+<A HREF = "#top">top</A>
+
+<A NAME = "anim"></A>
+<H2 ALIGN = CENTER>Export Song to PDF</H2>
+
+<H3>Exporting to PDF</H3>
+The Export to PDF option under the file menu creates a PDF file with a page
+for each move of the song, ready for printing and sharing. Each page 
+consists of a picture of the set on the grid, labeled by the song name, 
+measures, number of counts of the move, and any text that may be
+associated with the move. The ranks and their
+command lists appear below.<br><br>
+The pop-up for Export to PDF has options to format the pages. For each
+move, the # of columns option specifies the number of columns used to
+display the ranks and command lists. The default is 3, and there is a
+minimum of 1 column and a maximum of 10 columns. Each rank and its
+command list is added to a different column if possible, or to the column
+with the fewest ranks, starting from the first column. The text of
+each column wraps within the column. The font of all the text in the
+PDF can also be specified. <br><br>
+<CENTER><IMG SRC = "HelpScreens/export1.gif"></Center><br><CENTER><FONT
+		FACE = "ARIAL">For this song, each move will display ranks 
+		in two columns.</FONT></CENTER><br>
+<CENTER><IMG SRC = "HelpScreens/export2.gif"></Center><br><CENTER><FONT
+		FACE = "ARIAL">This is one of the moves created by entering
+		the settings above, in this case the song name is "Debug".</FONT></CENTER>
+
+<H3>Exporting Individual Ranks</H3>
+The Export Individual Ranks option on the file menu also produces a PDF
+document. This time it is organized by ranks instead of moves. Every rank
+that appears in each move of the song appears in the document, with its
+commands for each move listed. <br><br>
+<CENTER><IMG SRC = "HelpScreens/export3.gif"></Center><br><CENTER><FONT
+		FACE = "ARIAL">This song "Debug" has three ranks and two
+		moves. Three columns were chosen.</FONT></CENTER><br><br>
+The pop-up
+for this option asks for the font size and number of columns, similar to the
+Export to PDF option described above. 
+
+<br><br>
+<A HREF = "#top">top</A>
+
+<A NAME = "coml"></A>
+<H2 ALIGN = CENTER>RankPanda Program Commands Quick Reference</H2>
+
+<H3>List of Commands</H3>
+<TABLE BORDER="1">
+    <TR>
+        <TH>Command</TH>
+        <TH>Command Name</TH>
+        <TH>Description</TH>
+        <TH>Requirements</TH>
+    </TR>
+    <TR>
+        <TD>MT</TD>
+        <TD>Mark Time</TD>
+        <TD>March in place</TD>
+        <TD>Length (number of counts)</TD>
+    </TR>
+    <TR>
+	<TD>Hlt</TD>
+	<TD>Halt</TD>
+	<TD>No Action</TD>
+	<TD>Length (number of counts)</TD>
+    <TR>
+        <TD>FM</TD>
+        <TD>Forward March</TD>
+        <TD>Move forward (down screen)</TD>
+        <TD>Length (number of counts)</TD>
+    </TR>
+    <TR>
+        <TD>BM</TD>
+        <TD>Backward March</TD>
+        <TD>Move back (up screen)</TD>
+        <TD>Length (number of counts)</TD>
+    </TR>
+    <TR>
+        <TD>RS</TD>
+        <TD>Right Slide</TD>
+        <TD>Move right (left screen)</TD>
+        <TD>Length (number of counts)</TD>
+    </TR>
+    <TR>
+        <TD>LS</TD>
+        <TD>Left Slide</TD>
+        <TD>Move left (right screen)</TD>
+        <TD>Length (number of counts)</TD>
+    </TR>
+    <TR>
+	<TD>Flt</TD>
+	<TD>Flatten Rank</TD>
+	<TD>Make curved rank into a straight line</TD>
+	<TD>Length (number of counts)</TD>
+    <TR>
+        <TD>GT</TD>
+        <TD>Gate Turn</TD>
+        <TD>Pivot about endpoint</TD>
+        <TD>Length (number of counts), Non-Pivot Endpoint, Direction</TD>
+    </TR>
+    <TR>
+        <TD>PW</TD>
+        <TD>Pinwheel Turn</TD>
+        <TD>Turn around midpoint</TD>
+        <TD>Length (number of counts), Direction</TD>
+    </TR>
+    <TR>
+        <TD>Exp</TD>
+        <TD>Expand Rank</TD>
+        <TD>Lengthen rank by moving an endpoint</TD>
+        <TD>Length (number of counts), Endpoint to move</TD>
+    </TR>
+    <TR>
+        <TD>Exp1</TD>
+        <TD>Expand Endpoint 1</TD>
+        <TD>Lengthen rank by moving endpoint 1</TD>
+        <TD>Length (number of counts)</TD>
+    </TR>
+    <TR>
+        <TD>Cond</TD>
+        <TD>Condense rank</TD>
+        <TD>Shorten rank by moving an endpoint</TD>
+        <TD>Length (number of counts), Endpoint to move</TD>
+    </TR>
+    <TR>
+        <TD>DTP</TD>
+        <TD>Direct to Point</TD>
+        <TD>Move rank directly to any position</TD>
+        <TD>Length (number of counts), Final Position</TD>
+    </TR>
+    <TR>
+        <TD>FTA</TD>
+        <TD>Follow the Asshole</TD>
+        <TD>Rest of rank follows an endpoint through arbitrary path</TD>
+        <TD>Length (number of counts), Waypoints,
+            Curved/Straight Path</TD>
+    </TR>
+    <TR>
+        <TD>Curv</TD>
+        <TD>Curve Rank</TD>
+        <TD>Change rank from straight line into a curve</TD>
+        <TD>Length (number of counts), Final Position</TD>
+    </TR>
+   
+</TABLE>
+<H3>Keyboard and Mouse Combinations</H3>
+<TABLE BORDER="1">
+    <TR>
+        <TH>Key</TH>
+        <TH>Mouse Button</TH>
+        <TH>Action</TH>
+        <TH>Requirements</TH>
+    </TR>
+    <TR>
+        <TD>Ctrl</TD>
+        <TD>Left (click and drag)</TD>
+        <TD>Draw rank</TD>
+        <TD>Within a move</TD>
+    </TR>
+    <TR>
+        <TD>Shift</TD>
+        <TD>Left (click rank)</TD>
+        <TD>Select each rank clicked</TD>
+        <TD>A rank exists</TD>
+    </TR>
+    <TR>
+        <TD>Shift</TD>
+        <TD>Right (click spline point)</TD>
+        <TD>Delete spline point</TD>
+        <TD>A spline point exists</TD>
+    </TR>
+    <TR>
+        <TD>Any keyboard character</TD>
+        <TD>None</TD>
+        <TD>Name selected rank</TD>
+        <TD>None</TD>
+    </TR>
+    <TR>
+        <TD>None</TD>
+        <TD>Right (click endpoint 0 or spline point)</TD>
+        <TD>Add spline point between this and next point</TD>
+        <TD>None</TD>
+    </TR>
+</TABLE>
+<H3>Toolbar Buttons</H3>
+<TABLE BORDER = "1">
+    <TR>
+	<TH>Icon</TH>
+	<TH>Name</TH>
+	<TH>Function</TH>
+    </TR>
+    <TR>
+	<TD><IMG SRC = "icons/curveicon.png"></TD>
+	<TD>Curve Spline</TD>
+	<TD>The selected rank curves through its spline points</TD>
+    </TR>
+    <TR>
+	<TD><IMG SRC = "icons/drawicon.png"></TD>
+	<TD>Draw Rank</TD>
+	<TD>Draw rank by clicking and dragging with left mouse button</TD>
+    </TR>
+    <TR>
+	<TD><IMG SRC = "icons/deleteicon.png"></TD>
+	<TD>Delete Rank</TD>
+	<TD>Delete selected rank</TD>
+    </TR>
+    <TR>
+	<TD><IMG SRC = "icons/displayicon.png"></TD>
+	<TD>Display Status at Count</TD>
+	<TD>Displays the move at specified count</TD>
+    </TR>
+
+    <TR>
+	<TD><IMG SRC = "icons/holdicon.png"></TD>
+	<TD>Hold Rank</TD>
+	<TD>Lock command list of selected rank</TD>
+    </TR>
+    <TR>
+	<TD><IMG SRC = "icons/moveicon.png"></TD>
+	<TD>Move rank</TD>
+	<TD>Click on rank and drag to a new position</TD>
+    </TR>
+    <TR>
+	<TD><IMG SRC = "icons/playicon.png"></TD>
+	<TD>Play animation</TD>
+	<TD>Play animation after adding waypoints</TD>
+    </TR>
+    <TR>
+	<TD><IMG SRC = "icons/stopicon.png"></TD>
+	<TD>Stop animation</TD>
+	<TD>Stops playing an animation</TD>
+    </TR>
+    <TR>
+	<TD><IMG SRC = "icons/addwaypointicon.png"></TD>
+	<TD>Add Waypoint</TD>
+	<TD>Add waypoint for animation</TD>
+    </TR>
+    <TR>
+	<TD><IMG SRC = "icons/removewaypointicon.png"></TD>
+	<TD>Remove Waypoint</TD>
+	<TD>Remove animation waypoint</TD>
+    </TR>
+    <TR>
+	<TD><IMG SRC = "icons/zigzagicon.png"></TD>
+	<TD>Straight Spline</TD>
+	<TD>The rank runs straight through spline points</TD>
+    </TR>
+    <TR>
+	<TD><IMG SRC = "icons/snaptoendicon.png"></TD>
+	<TD>Snap to End Location </TD>
+	<TD>Snaps the selected rank to its calculated position</TD>
+    </TR>
+    <TR>
+	<TD><IMG SRC = "icons/snaptobeginicon.png"></TD>
+	<TD>Snap to Begin Location</TD>
+	<TD>Snaps the version of the selected rank in the previous move to 
+		a location closer to the location of the selected rank</TD>
+    </TR>
+    <TR>
+	<TD><IMG SRC = "icons/switchlabelicon.png"></TD>
+	<TD>Switch Label</TD>
+	<TD>Displays the name of selected rank on other side</TD>
+    </TR>
+    <TR>
+	<TD>N/A</TD>
+	<TD>Unicode</TD>
+	<TD>Name selected rank with a unicode character</TD>
+    </TR>
+</TABLE>
+
+<br><br>
+<A HREF = "#top">top</A>
+
+<A NAME = "faq"></A>
+<H2 ALIGN = CENTER> Frequently Asked Questions</H2>
+<B>Q:</B> Why can't I edit the command list?</B><br>
+<B>A: Make sure the rank(s) you have selected and are trying to add
+	commands to are locked.<br><br></B>
+<B>Q:</B> Why aren't any commands appearing?<br>
+<B>A:</B> There are a few reasons this could happen. <br>
+1) There may a gap between this move and the previous<br>
+2) The rank may not share a name with a rank in the previous move<br>
+3) You might want to try de-selecting and re-selecting the rank.<br><br>
+<B>Q:</B> What is the unicode value for a hammer and sickle?<br> 
+<B>A:</B> 9773<br><br>
+<B>Q:</B> I have another question and I need to talk to someone!<br>
+<B>A:</B> You can contact the RankPanda dev team at:<br>
+Adam Sorrin - acs73@cornell.edu<br>
+Lauren Dicristofaro - lmd59@cornell.edu<br>
+Mark Broomfield - mbb89@cornell.edu<br>
+Norris Xu - nx26@cornell.edu<br>
+Sally Tao - st349@cornell.edu<br>
+<A HREF = "#top">top</A>
+</Body>
+<P>
+
