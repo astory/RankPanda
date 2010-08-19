@@ -594,8 +594,8 @@ class Rank(object):
         end1 = endLocation.GetListOfPoints()[-1]
         endMid = endLocation.GetMidPoint()
         beginMid = beginLocation.GetMidPoint()
-        beginLength = math.sqrt((begin1.x - begin0.x)*(begin1.x - begin0.x) + (begin1.y - begin0.y)*(begin1.y - begin0.y))
-        endLength = math.sqrt((end1.x - end0.x)*(end1.x - end0.x) + (end1.y - end0.y)*(end1.y - end0.y))
+        beginLength = int(round(math.sqrt((begin1.x - begin0.x)*(begin1.x - begin0.x) + (begin1.y - begin0.y)*(begin1.y - begin0.y))))#LMD change to round
+        endLength = int(round(math.sqrt((end1.x - end0.x)*(end1.x - end0.x) + (end1.y - end0.y)*(end1.y - end0.y))))#LMD change to round
         if (beginLength != 16):
             newMid1x = (begin1.x - begin0.x)*(8/beginLength) + begin0.x
             newMid1y = (begin1.y - begin0.y)*(8/beginLength) + begin0.y
@@ -630,11 +630,17 @@ class Rank(object):
             newMid1y = (s*(beginMid.x - begin0.x) + c*(beginMid.y - begin0.y)) + begin0.y
             newMid0x = (c*(beginMid.x - begin1.x) - s*(beginMid.y - begin1.y)) + begin1.x
             newMid0y = (s*(beginMid.x - begin1.x) + c*(beginMid.y - begin1.y)) + begin1.y
-            stepsPW = math.fabs((endAng - beginAng)*(16/math.pi))
-            length0 = math.fabs(endMid.x - newMid0x) + math.fabs(endMid.y - newMid0y) + 2*stepsPW   #math.sqrt((endMid.x - newMid0x)*(endMid.x - newMid0x) + (endMid.y - newMid0y)*(endMid.y - newMid0y))
-            length1 = math.fabs(endMid.x - newMid1x) + math.fabs(endMid.y - newMid1y) + 2*stepsPW   #math.sqrt((endMid.x - newMid1x)*(endMid.x - newMid1x) + (endMid.y - newMid1y)*(endMid.y - newMid1y))
-            lengthPW = math.fabs(endMid.x - beginMid.x) + math.fabs(endMid.y - beginMid.y) + stepsPW             #math.sqrt((endMid.x - beginMid.x)*(endMid.x - beginMid.x) + (endMid.y - beginMid.y)*(endMid.y - beginMid.y))
-            if (endAng > beginAng):
+####################################################################################################LMD fix
+            angDiff= endAng-beginAng
+            if (endAng < beginAng): angDiff=angDiff+360 #angDiff is CCW angle change from beginning to end angle
+            if (angDiff<180): stepsPW = angDiff*(16/math.pi)
+            else: stepsPW = (360-angDiff)*(16/math.pi)
+            
+            length0 = math.fabs(endMid.x - newMid0x) + math.fabs(endMid.y - newMid0y) + 2*stepsPW
+            length1 = math.fabs(endMid.x - newMid1x) + math.fabs(endMid.y - newMid1y) + 2*stepsPW
+            lengthPW = math.fabs(endMid.x - beginMid.x) + math.fabs(endMid.y - beginMid.y) + stepsPW
+
+            if (angDiff<180):
                 #CCW
                 if (lengthPW <= length0):
                     if (lengthPW <= length1):
@@ -658,6 +664,7 @@ class Rank(object):
                         newCommand = Commands.GTCW0(2*stepsPW, beginLocation)
                     else:
                         newCommand = Commands.GTCW1(2*stepsPW, beginLocation)
+#############################################################################################
             commandListSoFar.append(newCommand)
             length = length - newCommand.GetLength()
             beginLocation = newCommand.GetEndLocation()
