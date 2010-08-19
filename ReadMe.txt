@@ -7,3 +7,10 @@
    If you're using Mac OS 9.x or 8.x, place the DejaVuSans.ttf file in the System Folder.
    If you're using Linux, this font is already included in /usr/share/fonts/truetype.
 4) Open the RankPanda folder contained alongside this readme. Double click on GUIMain.py to run. 
+
+Special instructions for Ubuntu:
+  You will need some additional python packages:
+
+  sudo apt-get install python2.6-wxgtk2.8
+  sudo apt-get install python-reportlab
+  sudo apt-get install python2.6-pygame
