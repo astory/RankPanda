@@ -7,7 +7,7 @@ import RankLocation
 import Point
 
 # Debug constants
-DEBUG = True
+DEBUG = False
 DEBUG_RANK_COLOUR = wx.Colour(127, 63, 0)
 
 # print constants
@@ -56,7 +56,7 @@ FIELD_NUMBER_BACK_FRONT = FIELD_WIDTH_STEPS - FIELD_NUMBER_FRONT_FRONT
 FIELD_NUMBER_BACK_BACK = FIELD_WIDTH_STEPS - FIELD_NUMBER_FRONT_BACK
 
 FIELD_NUMBER_HEIGHT = FIELD_NUMBER_FRONT_BACK - FIELD_NUMBER_FRONT_FRONT
-FIELD_NUMBER_SPACE = 0.5
+FIELD_NUMBER_SPACE = 0.05
 
 FIELD_NUMBER_COLOUR = wx.Colour(63, 63, 63)
 
@@ -144,6 +144,7 @@ class Field(wx.Panel):
     def Draw(self):
         self.paintBitmap = wx.EmptyBitmap(*self.GetSizeTuple())
         dc = wx.MemoryDC()
+        dc.SetFont(wx.Font(10,wx.FONTFAMILY_MODERN,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_NORMAL, faceName="DejaVu Sans"))
         dc.SelectObject(self.paintBitmap)
 
         dc.SetBrush(wx.Brush('black'))
@@ -249,8 +250,8 @@ class Field(wx.Panel):
                         id = self.PickRank(self.main.core.GetRanks(), event.m_x, event.m_y)
                         if id is not None:
                             self.main.core.RankClicked(id, event.ShiftDown()) # deselect all ranks if shift isn't down
-                        elif not event.ShiftDown() and not event.AltDown():
-                            self.main.core.FieldClicked() # deselected all ranks if shift isn't down
+                        elif not event.ShiftDown():
+                            self.main.core.FieldClicked() # deselect all ranks if shift isn't down
 
         self.main.RefreshRankList()
         self.main.RefreshCommandList()
@@ -479,6 +480,7 @@ class Field(wx.Panel):
         self.fixednumbers = []
         for i in range(10):
             dc = wx.MemoryDC()
+            dc.SetFont(wx.Font(72,wx.FONTFAMILY_MODERN,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_BOLD, faceName="DejaVu Sans"))
             textdim = dc.GetTextExtent(str(i))
             textdim = (textdim[0], textdim[1])
             bitmap = wx.EmptyBitmap(*textdim)
@@ -510,7 +512,7 @@ class Field(wx.Panel):
 
         fronty = self.TY(rect, FIELD_NUMBER_FRONT_FRONT) - self.numbersheight
         backy = self.TY(rect, FIELD_NUMBER_BACK_BACK) - self.numbersheight
-        space = self.T(rect, FIELD_NUMBER_SPACE)
+        space = self.T(rect, FIELD_NUMBER_SPACE) + (self.numbers[5][1] / 2.0)
 
         dc.DrawBitmap(self.numbers[5][0], horizontalStart - self.numbers[5][1] - space, fronty, False)
         dc.DrawBitmap(self.numbers[0][0], horizontalStart + space, fronty, False)
@@ -845,6 +847,7 @@ class DTPField(Field):
     def Draw(self):
         self.paintBitmap = wx.EmptyBitmap(*self.GetSizeTuple())
         dc = wx.MemoryDC()
+        dc.SetFont(wx.Font(10,wx.FONTFAMILY_MODERN,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_NORMAL, faceName="DejaVu Sans"))
         dc.SelectObject(self.paintBitmap)
 
         dc.SetBrush(wx.Brush('black'))
@@ -997,6 +1000,7 @@ class FTAField(Field):
     def Draw(self):
         self.paintBitmap = wx.EmptyBitmap(*self.GetSizeTuple())
         dc = wx.MemoryDC()
+        dc.SetFont(wx.Font(10,wx.FONTFAMILY_MODERN,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_NORMAL, faceName="DejaVu Sans"))
         dc.SelectObject(self.paintBitmap)
 
         dc.SetBrush(wx.Brush('black'))
@@ -1223,6 +1227,7 @@ class StatusField(Field):
     def Draw(self):
         self.paintBitmap = wx.EmptyBitmap(*self.GetSizeTuple())
         dc = wx.MemoryDC()
+        dc.SetFont(wx.Font(10,wx.FONTFAMILY_MODERN,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_NORMAL, faceName="DejaVu Sans"))
         dc.SelectObject(self.paintBitmap)
 
         dc.SetBrush(wx.Brush('black'))
