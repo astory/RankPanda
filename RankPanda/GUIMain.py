@@ -281,7 +281,7 @@ class MainWindow(wx.Frame):
 #       self.fieldbar.Bind(wx.EVT_CHAR, self.fieldbar.OnKey)
 
         self.moveSetList = wx.ImageList(GUIField.MINI_FIELD_SIZE[0], GUIField.MINI_FIELD_SIZE[1], False, 0)
-        self.moveList = wx.ListCtrl(self.panel, ID_MOVE_LIST, style = wx.LC_SINGLE_SEL | wx.LC_ICON)
+        self.moveList = wx.ListCtrl(self.panel, ID_MOVE_LIST, style = wx.LC_SINGLE_SEL | wx.LC_ICON | wx.LC_ALIGN_TOP)
         self.moveList.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnMoveSelect)
         self.moveList.AssignImageList(self.moveSetList, wx.IMAGE_LIST_NORMAL)
 
@@ -290,7 +290,7 @@ class MainWindow(wx.Frame):
         self.sidepanel = wx.BoxSizer(wx.VERTICAL)
         self.sidepanel.Add(self.moveListCaption, 0, wx.ALIGN_CENTRE)
         self.sidepanel.Add(self.moveList, 1, wx.EXPAND)
-        self.sidepanel.Add((GUIField.MINI_FIELD_SIZE[0] * 1.37, 1), 0, wx.ALIGN_CENTRE)
+        self.sidepanel.Add((GUIField.MINI_FIELD_SIZE[0] * 1.15, 1), 0, wx.ALIGN_CENTRE)
 
         self.toppanel = wx.BoxSizer(wx.HORIZONTAL)
         self.toppanel.Add(self.fieldpanel, 4, wx.EXPAND)
