@@ -103,19 +103,20 @@ class Rank(object):
 
     def FixTrailingMT(self):
         l = len(self._commandList)
-        if (self._commandList[l - 1].GetName() == 'MT'):
-            i = l - 1
-            while ((i >= 0) and (self._commandList[i].GetName() == 'MT')):
-                i = i - 1
-            if (i >= 0):
-                i = i + 1
-                while (len(self._commandList) > i):
-                    self._commandList.pop()
-            else:
-                self._commandList = [Commands.MarkTime(self._move.GetLength(), self._commandList[-1].GetEndLocation())]
-        total = self.CalculateTotalCountsOfCommands()
-        if (total < self._move.GetLength()):
-            self._commandList.append(Commands.MarkTime(self._move.GetLength() - total, self._commandList[-1].GetEndLocation()))
+        if l > 0:
+            if (self._commandList[l - 1].GetName() == 'MT'):
+                i = l - 1
+                while ((i >= 0) and (self._commandList[i].GetName() == 'MT')):
+                    i = i - 1
+                if (i >= 0):
+                    i = i + 1
+                    while (len(self._commandList) > i):
+                        self._commandList.pop()
+                else:
+                    self._commandList = [Commands.MarkTime(self._move.GetLength(), self._commandList[-1].GetEndLocation())]
+            total = self.CalculateTotalCountsOfCommands()
+            if (total < self._move.GetLength()):
+                self._commandList.append(Commands.MarkTime(self._move.GetLength() - total, self._commandList[-1].GetEndLocation()))
 
 
 
@@ -315,6 +316,7 @@ class Rank(object):
         self._commandList.insert(commandNumber + 1, command)
         self.UpdateCommandList()
 
+
     def DeleteCommand(self, commandNumber):
         if ((not self.hold) or (self.GetPrior() is None)):
             return
@@ -444,7 +446,6 @@ class Rank(object):
             self._commandList[i].GetEndLocation().SetCurved(True)
             i = i + 1
 
-    # This returns the count at which a given commmand starts at.
     def CalculateCountFromCommandNumber(self, commandNumber):
         if (commandNumber == 0):
             return 0
@@ -455,9 +456,6 @@ class Rank(object):
             i = i + 1
         return accum
 
-    # Total length of the command list.  Should never be shorter than the
-    # containing move's length unless in an intermediate state, but may be
-    # longer.
     def CalculateTotalCountsOfCommands(self):
         i = 0
         accum = 0
@@ -466,17 +464,6 @@ class Rank(object):
             i = i + 1
         return accum
 
-    # The infamous command generator.
-    # The algorithm:
-    # First, check to see if this is a 'special case'.  If so, even if the rank
-    # is curved, it can be treated as a straight line.
-    # Otherwise, flatten the rank.  The number of counts taken is equal to the
-    # length of the furthest spline point from that straight line.  Then,
-    # use the straight line generator to get form one straight line to another,
-    # and then recurve, if nececssary.
-    # As a final step, append a MarkTime.  This step may be able to be skipped,
-    # as the UpdateCommandList function, the only thing calling this,
-    # should append it automatically if necessary.
     def _GenerateCommandList(self, beginLocation, endLocation, length):
         if (self._IsSpecialCaseCMDGen(beginLocation, endLocation)):
             return self._GenerateCommandListStraightLine(beginLocation, endLocation, length, [])[0]
@@ -521,11 +508,7 @@ class Rank(object):
 
 
 
-    # The purpose of this method is to determine if a rank can be gotten from
-    # one RankLocation to another with just Expand, Condense, GT, PW, RS/LS,
-    # and FM/BM.  I find the length from each spline point to the straight line
-    # connecting the first and last point.  If these lengths are the same, then
-    # it is this special case and return True.
+
     def _IsSpecialCaseCMDGen(self, beginLocation, endLocation):
         beginPointList = beginLocation.GetListOfPoints()
         endPointList = endLocation.GetListOfPoints()
@@ -539,31 +522,6 @@ class Rank(object):
                 return False
             i = i + 1
         return True
-
-    # Takes in a RankLocation and a number, namely the point number of which
-    # you wish to learn the length of.  Assume that the RankLocation looks
-    # like:
-    #     .
-    #    / \
-    #   /   \
-    #  .     \     .
-    #         \   /
-    #          \ /
-    #           .
-
-    # This method should calculate the following lengths:  (the added lines):
-
-    #     .
-    #    /|\
-    #   / | \
-    #  .  -  \  -  .
-    #         \ | /
-    #          \|/
-    #           .
-
-    # This helps to determine if one (possibly curved) RankLocation is a
-    # translation of another, meaning you can get from one to another
-    # using just Expand, Condense, GT, PW, RS/LS, FM/BM
 
     def _CalcLengthsHelper(self, location, number):
         pointList = location.GetListOfPoints()
@@ -586,7 +544,7 @@ class Rank(object):
     #       RS/LS
     #       FM/BM
     # Use a heuristic to figure out whether to Condense0 or Condense1,
-    # Same with GT/PW.
+    # Same with GT/PW
     def _GenerateCommandListStraightLine(self, beginLocation, endLocation, length, commandListSoFar):
         begin0 = beginLocation.GetListOfPoints()[0]
         begin1 = beginLocation.GetListOfPoints()[-1]
@@ -594,8 +552,8 @@ class Rank(object):
         end1 = endLocation.GetListOfPoints()[-1]
         endMid = endLocation.GetMidPoint()
         beginMid = beginLocation.GetMidPoint()
-        beginLength = int(round(math.sqrt((begin1.x - begin0.x)*(begin1.x - begin0.x) + (begin1.y - begin0.y)*(begin1.y - begin0.y))))#LMD change to round
-        endLength = int(round(math.sqrt((end1.x - end0.x)*(end1.x - end0.x) + (end1.y - end0.y)*(end1.y - end0.y))))#LMD change to round
+        beginLength = math.sqrt((begin1.x - begin0.x)*(begin1.x - begin0.x) + (begin1.y - begin0.y)*(begin1.y - begin0.y))
+        endLength = math.sqrt((end1.x - end0.x)*(end1.x - end0.x) + (end1.y - end0.y)*(end1.y - end0.y))
         if (beginLength != 16):
             newMid1x = (begin1.x - begin0.x)*(8/beginLength) + begin0.x
             newMid1y = (begin1.y - begin0.y)*(8/beginLength) + begin0.y
@@ -630,17 +588,11 @@ class Rank(object):
             newMid1y = (s*(beginMid.x - begin0.x) + c*(beginMid.y - begin0.y)) + begin0.y
             newMid0x = (c*(beginMid.x - begin1.x) - s*(beginMid.y - begin1.y)) + begin1.x
             newMid0y = (s*(beginMid.x - begin1.x) + c*(beginMid.y - begin1.y)) + begin1.y
-####################################################################################################LMD fix
-            angDiff= endAng-beginAng
-            if (endAng < beginAng): angDiff=angDiff+360 #angDiff is CCW angle change from beginning to end angle
-            if (angDiff<180): stepsPW = angDiff*(16/math.pi)
-            else: stepsPW = (360-angDiff)*(16/math.pi)
-            
-            length0 = math.fabs(endMid.x - newMid0x) + math.fabs(endMid.y - newMid0y) + 2*stepsPW
-            length1 = math.fabs(endMid.x - newMid1x) + math.fabs(endMid.y - newMid1y) + 2*stepsPW
-            lengthPW = math.fabs(endMid.x - beginMid.x) + math.fabs(endMid.y - beginMid.y) + stepsPW
-
-            if (angDiff<180):
+            stepsPW = math.fabs((endAng - beginAng)*(16/math.pi))
+            length0 = math.fabs(endMid.x - newMid0x) + math.fabs(endMid.y - newMid0y) + 2*stepsPW   #math.sqrt((endMid.x - newMid0x)*(endMid.x - newMid0x) + (endMid.y - newMid0y)*(endMid.y - newMid0y))
+            length1 = math.fabs(endMid.x - newMid1x) + math.fabs(endMid.y - newMid1y) + 2*stepsPW   #math.sqrt((endMid.x - newMid1x)*(endMid.x - newMid1x) + (endMid.y - newMid1y)*(endMid.y - newMid1y))
+            lengthPW = math.fabs(endMid.x - beginMid.x) + math.fabs(endMid.y - beginMid.y) + stepsPW             #math.sqrt((endMid.x - beginMid.x)*(endMid.x - beginMid.x) + (endMid.y - beginMid.y)*(endMid.y - beginMid.y))
+            if (endAng > beginAng):
                 #CCW
                 if (lengthPW <= length0):
                     if (lengthPW <= length1):
@@ -664,7 +616,6 @@ class Rank(object):
                         newCommand = Commands.GTCW0(2*stepsPW, beginLocation)
                     else:
                         newCommand = Commands.GTCW1(2*stepsPW, beginLocation)
-#############################################################################################
             commandListSoFar.append(newCommand)
             length = length - newCommand.GetLength()
             beginLocation = newCommand.GetEndLocation()
@@ -766,15 +717,8 @@ class Rank(object):
 
         return (commandListSoFar, length, beginLocation)
 
-
     def GetLabelLocation(self):
         return self._labelLocation
 
     def SwitchLabelLocation(self):
         self._labelLocation = not self._labelLocation
-
-    def SwitchEndpoints(self):
-        self._endLocation.SwitchEndpoints()
-        self.UpdateCommandList()
-        if (self.GetFollowing() is not None):
-            self.GetFollowing().UpdateCommandList()

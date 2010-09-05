@@ -5,10 +5,16 @@ import os
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch, cm
 from reportlab.lib.pagesizes import LETTER
+from reportlab.lib.fonts import addMapping
+from reportlab.pdfbase import pdfmetrics, ttfonts
 import PIL
 from PIL import Image
 import CoreWrapper
 import GUIField
+
+#register DejaVuSansMono
+pdfmetrics.registerFont(ttfonts.TTFont('DejaVuSansMono', 'DejaVuSansMono.ttf'))
+addMapping('DejaVuSansMono', 0, 0, 'DejaVuSansMono')
 
 #constants
 page_size = (LETTER[1],LETTER[0]) #landscape of letter standard
@@ -96,7 +102,7 @@ def printDrill(song, stringPath, moveNames, commandStrings, fontSize, columnsArr
     canv = canvas.Canvas(stringPath, page_size)
     i=0
     while (i<len(moveNames)):
-        canv.setFont('Courier',12)
+        canv.setFont('DejaVuSansMono',12)
         canv.drawString(left_margin, field_height + field_size[1] + 10, song)
         canv.drawCentredString(0.5*page_size[0], 0.5 * inch,"Page %d" % canv.getPageNumber())
         canv.drawString(right_margin - 2*inch, field_height + field_size[1] + 10, moveNames[i])
@@ -114,7 +120,7 @@ def printDrill(song, stringPath, moveNames, commandStrings, fontSize, columnsArr
         canv.line(left_margin, field_height, right_margin, field_height)
         
         tx = canv.beginText(left_margin, 2.5 * inch)
-        tx.setFont("Courier", fontSize)
+        tx.setFont("DejaVuSansMono", fontSize)
         stringList = commandStrings[i]
         if (movetexts[i][1]):
             drawEven(tx, [movetexts[i][0]], 1080/fontSize, 1) #overwrite only
@@ -146,7 +152,7 @@ def printInd(song, stringPath, moveNames, commandStrings, fontSize, columns, mea
     while (i<len(commandStrings)):
         
         tx = canv.beginText(left_margin, top_margin)
-        tx.setFont("Courier", fontSize)
+        tx.setFont("DejaVuSansMono", fontSize)
         j=0
         stringList=[]
         while((j<columns) and (i+j<len(commandStrings))):
