@@ -2,11 +2,13 @@
 2) Place the site-packages folder contained alongside this readme in the Python26\Lib folder.
    (Overwrite the already existing site-packages folder)
    The location of Python26 will depend on where you install it when you install python 2.6
-3) If you're using windows, place the DejaVuSans.ttf file in C:\WINDOWS\Fonts.
-   If you're using Mac OS X, place the DejaVuSans.ttf file in the fonts folder of the library folder.
-   If you're using Mac OS 9.x or 8.x, place the DejaVuSans.ttf file in the System Folder.
-   If you're using Linux, this font is already included in /usr/share/fonts/truetype.
-4) Open the RankPanda folder contained alongside this readme. Double click on GUIMain.py to run. 
+3) If you're using Windows, place the DejaVuSans.ttf and DejaVuSansMono.ttf files in C:\WINDOWS\Fonts.
+   If you're using Mac OS X, place the DejaVuSans.ttf and DejaVuSansMono.ttf files in the fonts folder of the library folder.
+   If you're using Mac OS 9.x or 8.x, place the DejaVuSans.ttf and DejaVuSansMono.ttf files in the System Folder.
+   If you're using Linux, these fonts are already included in /usr/share/fonts/truetype.
+4) Open the RankPanda folder contained alongside this readme. Double click on GUIMain.py to run.
+   For Linux, you may need to instead run the following command:
+     python GUIMain.py
 
 Special instructions for Ubuntu:
   You will need some additional python packages:
