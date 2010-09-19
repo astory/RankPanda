@@ -399,8 +399,9 @@ class Rank(object):
 
     def DeleteSplinePoint(self, number):
         listOfPoints = self._endLocation.GetListOfPoints()
-        listOfPoints.pop(number)
-        self._endLocation.SetListOfPoints(listOfPoints, None)
+        if (len(listOfPoints) > 2):
+            listOfPoints.pop(number)
+            self._endLocation.SetListOfPoints(listOfPoints, None)
 
 
     def DeleteAllSplinePoints(self):
