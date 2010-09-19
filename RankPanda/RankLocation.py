@@ -5,7 +5,7 @@ import RankLocation
 import Commands
 import math
 
-# This calss represents the location of a rank that can be drawn on the screen.
+# This class represents the location of a rank that can be drawn on the screen.
 # In part, it serves as an object-oriented wrapper for the SplineGenerator
 # class.  However, it also supports straight-line ranks (only two points)
 # and ranks that aren't curved/splined (think a zigzag).
