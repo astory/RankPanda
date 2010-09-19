@@ -9,6 +9,11 @@ import math
 # In part, it serves as an object-oriented wrapper for the SplineGenerator
 # class.  However, it also supports straight-line ranks (only two points)
 # and ranks that aren't curved/splined (think a zigzag).
+class RankLocationError(Exception):
+    """Base class for exceptions in this module"""
+class InvalidLocationListError(Exception):
+    """Exception raised for invalid location lists"""
+    pass
 
 class RankLocation(object):
 
@@ -51,11 +56,13 @@ class RankLocation(object):
     # If it's a straight line or a zig-zag, just store the list of points.
     # The straight lines will be drawn on the GUI end.
     def SetListOfPoints(self, listOfPoints, listOfSlopes):
+        if (len(listOfPoints) < 2):
+            raise InvalidLocationListError("Tried to set a list of %d points" % len(listOfPoints))
         self._listOfPoints = listOfPoints
-        if (len(listOfPoints) > 2):
-            self.straightLine = False
-        else:
-            self.straightLine = True
+
+        #determine whether the rank is straight: iff there are two points
+        self.straightLine = (len(listOfPoints) == 2)
+
         if ((self.curved) and (not self.straightLine)):
             if (listOfSlopes is None):
                 i = 0
