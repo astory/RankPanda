@@ -115,6 +115,7 @@ class Field(wx.Panel):
     def __init__(self, parent, id, style, main):
         wx.Panel.__init__(self, parent, id, style = style)
         self.main = main
+        self.rankNameFont = wx.Font(12, wx.FONTFAMILY_TELETYPE, wx.FONTSTYLE_NORMAL, wx.BOLD, False, u'DejaVuSansMono')
 
         # init field numbers
         self.InitNumbers()
@@ -678,6 +679,7 @@ class Field(wx.Panel):
 
                     textrect = wx.Rect(newpt[0] - NAME_RECT_WIDTH / 2, newpt[1] - NAME_RECT_HEIGHT / 2, NAME_RECT_WIDTH, NAME_RECT_HEIGHT)
 
+                dc.SetFont(self.rankNameFont)
                 dc.DrawImageLabel(r[1], wx.NullBitmap, textrect, wx.ALIGN_CENTRE)
 
 
