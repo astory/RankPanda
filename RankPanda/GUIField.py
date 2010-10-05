@@ -81,8 +81,8 @@ NAME_CALCULATED_COLOUR = wx.Colour(127, 127, 0)
 
 NAME_RECT_WIDTH = 10.0
 NAME_RECT_HEIGHT = 20.0
-NAME_DIST = 15.0
-MINI_NAME_DIST = 5.0 # this one is not used as names are not drawn in the minifields
+NAME_DIST = 8.0
+MINI_NAME_DIST = 2.5 # this one is not used as names are not drawn in the minifields
 
 # mode constants
 RANK_OFF = 0.0
@@ -222,7 +222,7 @@ class Field(wx.Panel):
             self.rankMode = RANK_ADD
 #           self.firstPoint = (event.m_x, event.m_y)
 # snap to grid
-            self.firstPoint = (self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_x))), self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_y))))
+            self.firstPoint = (self.TX(self.fieldRect, round(self.RX(self.fieldRect, event.m_x))), self.TY(self.fieldRect, round(self.RY(self.fieldRect, event.m_y))))
             self.secondPoint = self.firstPoint
         else:
             id = self.PickSpline(self.main.core.GetSelectedRanks(), event.m_x, event.m_y)
@@ -231,7 +231,7 @@ class Field(wx.Panel):
                 self.draggedPoint = id
 #               self.rankPos = (event.m_x, event.m_y)
 # snap to grid
-                self.rankPos = (self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_x))), self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_y))))
+                self.rankPos = (self.TX(self.fieldRect, round(self.RX(self.fieldRect, event.m_x))), self.TY(self.fieldRect, round(self.RY(self.fieldRect, event.m_y))))
                 self.main.core.PointGrabbed(*id)
             else:
                 id = self.PickRank(self.main.core.GetSelectedRanks(), event.m_x, event.m_y)
@@ -239,7 +239,7 @@ class Field(wx.Panel):
                     self.rankMode = RANK_DRAG_LINE
 #                   self.rankPos = (event.m_x, event.m_y)
 # snap to grid
-                    self.rankPos = (self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_x))), self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_y))))
+                    self.rankPos = (self.TX(self.fieldRect, round(self.RX(self.fieldRect, event.m_x))), self.TY(self.fieldRect, round(self.RY(self.fieldRect, event.m_y))))
                     self.main.core.RanksGrabbed()
                 else:
                     self.rankMode = RANK_OFF
@@ -321,7 +321,7 @@ class Field(wx.Panel):
             if self.rankMode == RANK_ADD:
 #               self.secondPoint = (event.m_x, event.m_y)
 # snap to grid
-                self.secondPoint = (self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_x))), self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_y))))
+                self.secondPoint = (self.TX(self.fieldRect, round(self.RX(self.fieldRect, event.m_x))), self.TY(self.fieldRect, round(self.RY(self.fieldRect, event.m_y))))
 
             elif self.rankMode == RANK_DRAG_POINT:
                 x, y = self.rankPos
@@ -330,7 +330,7 @@ class Field(wx.Panel):
                 delta = (round(self.R(self.fieldRect, event.m_x - x)), round(-self.R(self.fieldRect, event.m_y - y)))
 #               self.rankPos = (event.m_x, event.m_y)
 # snap to grid
-                self.rankPos = (self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_x))), self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_y))))
+                self.rankPos = (self.TX(self.fieldRect, round(self.RX(self.fieldRect, event.m_x))), self.TY(self.fieldRect, round(self.RY(self.fieldRect, event.m_y))))
 
                 self.main.core.PointDragged(self.draggedPoint[0], self.draggedPoint[1], delta[0], delta[1])
             elif self.rankMode == RANK_DRAG_LINE:
@@ -340,7 +340,7 @@ class Field(wx.Panel):
                 delta = (round(self.R(self.fieldRect, event.m_x - x)), round(-self.R(self.fieldRect, event.m_y - y)))
 #               self.rankPos = (event.m_x, event.m_y)
 # snap to grid
-                self.rankPos = (self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_x))), self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_y))))
+                self.rankPos = (self.TX(self.fieldRect, round(self.RX(self.fieldRect, event.m_x))), self.TY(self.fieldRect, round(self.RY(self.fieldRect, event.m_y))))
 
                 self.main.core.RanksDragged(*delta)
 
@@ -886,14 +886,14 @@ class DTPField(Field):
             self.draggedPoint = id
 #           self.rankPos = (event.m_x, event.m_y)
 # snap to grid
-            self.rankPos = (self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_x))), self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_y))))
+            self.rankPos = (self.TX(self.fieldRect, round(self.RX(self.fieldRect, event.m_x))), self.TY(self.fieldRect, round(self.RY(self.fieldRect, event.m_y))))
         else:
             id = self.PickRank(self.DTPeditranks, event.m_x, event.m_y)
             if id is not None:
                 self.rankMode = RANK_DRAG_LINE
 #               self.rankPos = (event.m_x, event.m_y)
 # snap to grid
-                self.rankPos = (self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_x))), self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_y))))
+                self.rankPos = (self.TX(self.fieldRect, round(self.RX(self.fieldRect, event.m_x))), self.TY(self.fieldRect, round(self.RY(self.fieldRect, event.m_y))))
             else:
                 self.rankMode = RANK_OFF
 
@@ -946,7 +946,7 @@ class DTPField(Field):
                 delta = (round(self.R(self.fieldRect, event.m_x - x)), round(-self.R(self.fieldRect, event.m_y - y)))
 #               self.rankPos = (event.m_x, event.m_y)
 # snap to grid
-                self.rankPos = (self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_x))), self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_y))))
+                self.rankPos = (self.TX(self.fieldRect, round(self.RX(self.fieldRect, event.m_x))), self.TY(self.fieldRect, round(self.RY(self.fieldRect, event.m_y))))
 
                 self.main.core.AdjustDTPPoint(self.draggedPoint[1], delta[0], delta[1])
             elif self.rankMode == RANK_DRAG_LINE:
@@ -956,7 +956,7 @@ class DTPField(Field):
                 delta = (round(self.R(self.fieldRect, event.m_x - x)), round(-self.R(self.fieldRect, event.m_y - y)))
 #               self.rankPos = (event.m_x, event.m_y)
 # snap to grid
-                self.rankPos = (self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_x))), self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_y))))
+                self.rankPos = (self.TX(self.fieldRect, round(self.RX(self.fieldRect, event.m_x))), self.TY(self.fieldRect, round(self.RY(self.fieldRect, event.m_y))))
 
                 self.main.core.AdjustDTPWhole(*delta)
 
@@ -1037,7 +1037,7 @@ class FTAField(Field):
         if event.ControlDown():
 #           self.firstPoint = (event.m_x, event.m_y)
 # snap to grid
-            point = (self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_x))), self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_y))))
+            point = (self.TX(self.fieldRect, round(self.RX(self.fieldRect, event.m_x))), self.TY(self.fieldRect, round(self.RY(self.fieldRect, event.m_y))))
             if self.endpoint:
                 self.main.core.FTA1AddingWayPoint(self.RX(self.fieldRect, point[0]), self.RY(self.fieldRect, point[1]))
             else:
@@ -1049,14 +1049,14 @@ class FTAField(Field):
                 self.draggedPoint = id
 #           self.rankPos = (event.m_x, event.m_y)
 # snap to grid
-                self.rankPos = (self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_x))), self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_y))))
+                self.rankPos = (self.TX(self.fieldRect, round(self.RX(self.fieldRect, event.m_x))), self.TY(self.fieldRect, round(self.RY(self.fieldRect, event.m_y))))
             else:
                 id = self.PickRank(self.FTAeditranks, event.m_x, event.m_y)
                 if id is not None:
                     self.rankMode = RANK_DRAG_LINE
 #               self.rankPos = (event.m_x, event.m_y)
 # snap to grid
-                    self.rankPos = (self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_x))), self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_y))))
+                    self.rankPos = (self.TX(self.fieldRect, round(self.RX(self.fieldRect, event.m_x))), self.TY(self.fieldRect, round(self.RY(self.fieldRect, event.m_y))))
                 else:
                     self.rankMode = RANK_OFF
 
@@ -1069,7 +1069,7 @@ class FTAField(Field):
                             self.draggedPoint = i
 #                           self.rankPos = (event.m_x, event.m_y)
 # snap to grid
-                            self.rankPos = (self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_x))), self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_y))))
+                            self.rankPos = (self.TX(self.fieldRect, round(self.RX(self.fieldRect, event.m_x))), self.TY(self.fieldRect, round(self.RY(self.fieldRect, event.m_y))))
                             break
                         i += 1
 
@@ -1158,7 +1158,7 @@ class FTAField(Field):
                 delta = (round(self.R(self.fieldRect, event.m_x - x)), round(-self.R(self.fieldRect, event.m_y - y)))
 #               self.rankPos = (event.m_x, event.m_y)
 # snap to grid
-                self.rankPos = (self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_x))), self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_y))))
+                self.rankPos = (self.TX(self.fieldRect, round(self.RX(self.fieldRect, event.m_x))), self.TY(self.fieldRect, round(self.RY(self.fieldRect, event.m_y))))
 
                 if self.endpoint:
                     self.main.core.AdjustFTA1EndLocationPoint(self.draggedPoint[1], delta[0], delta[1])
@@ -1171,7 +1171,7 @@ class FTAField(Field):
                 delta = (round(self.R(self.fieldRect, event.m_x - x)), round(-self.R(self.fieldRect, event.m_y - y)))
 #               self.rankPos = (event.m_x, event.m_y)
 # snap to grid
-                self.rankPos = (self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_x))), self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_y))))
+                self.rankPos = (self.TX(self.fieldRect, round(self.RX(self.fieldRect, event.m_x))), self.TY(self.fieldRect, round(self.RY(self.fieldRect, event.m_y))))
 
                 if self.endpoint:
                     self.main.core.AdjustFTA1Whole(*delta)
@@ -1184,7 +1184,7 @@ class FTAField(Field):
                 delta = (round(self.R(self.fieldRect, event.m_x - x)), round(-self.R(self.fieldRect, event.m_y - y)))
 #               self.rankPos = (event.m_x, event.m_y)
 # snap to grid
-                self.rankPos = (self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_x))), self.T(self.fieldRect, round(self.R(self.fieldRect, event.m_y))))
+                self.rankPos = (self.TX(self.fieldRect, round(self.RX(self.fieldRect, event.m_x))), self.TY(self.fieldRect, round(self.RY(self.fieldRect, event.m_y))))
 
                 if self.endpoint:
                     self.main.core.FTA1AdjustWayPoint(self.draggedPoint, *delta)
