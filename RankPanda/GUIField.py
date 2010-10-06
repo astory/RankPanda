@@ -115,6 +115,7 @@ class Field(wx.Panel):
     def __init__(self, parent, id, style, main):
         wx.Panel.__init__(self, parent, id, style = style)
         self.main = main
+        self.fieldNumbersFont = wx.Font(72,wx.FONTFAMILY_MODERN,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_BOLD, False, u'DejaVuSans')
         self.rankNameFont = wx.Font(12, wx.FONTFAMILY_TELETYPE, wx.FONTSTYLE_NORMAL, wx.BOLD, False, u'DejaVuSansMono')
 
         # init field numbers
@@ -481,7 +482,7 @@ class Field(wx.Panel):
         self.fixednumbers = []
         for i in range(10):
             dc = wx.MemoryDC()
-            dc.SetFont(wx.Font(72,wx.FONTFAMILY_MODERN,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_BOLD, faceName="DejaVu Sans"))
+            dc.SetFont(self.fieldNumbersFont)
             textdim = dc.GetTextExtent(str(i))
             textdim = (textdim[0], textdim[1])
             bitmap = wx.EmptyBitmap(*textdim)
@@ -647,6 +648,7 @@ class Field(wx.Panel):
         else:
             name_separation = NAME_DIST
 
+        dc.SetFont(self.rankNameFont)
         for r in ranks:
             if r[-1]:
                 inner_name_separation = name_separation
@@ -679,7 +681,6 @@ class Field(wx.Panel):
 
                     textrect = wx.Rect(newpt[0] - NAME_RECT_WIDTH / 2, newpt[1] - NAME_RECT_HEIGHT / 2, NAME_RECT_WIDTH, NAME_RECT_HEIGHT)
 
-                dc.SetFont(self.rankNameFont)
                 dc.DrawImageLabel(r[1], wx.NullBitmap, textrect, wx.ALIGN_CENTRE)
 
 
@@ -976,6 +977,7 @@ class FTAField(Field):
 
     def __init__(self, parent, id, style, main, endpoint, FTAranks): # endpoint is True (1) or False (0)
         Field.__init__(self, parent, id, style, main)
+        self.waypointFont = wx.Font(12, wx.FONTFAMILY_TELETYPE, wx.FONTSTYLE_NORMAL, wx.BOLD, False, u'DejaVuSansMono')
 
         # init field numbers
         self.InitNumbers()
@@ -1207,6 +1209,7 @@ class FTAField(Field):
         dc.SetTextForeground(colour)
         i = 0
 
+        dc.SetFont(self.waypointFont)
         for w in waypoints:
             (x, y) = (self.TX(self.fieldRect, w.x), self.TY(self.fieldRect, w.y))
             dc.DrawCircle(x, y, FTA_WAYPOINT_RADIUS)
