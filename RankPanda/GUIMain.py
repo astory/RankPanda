@@ -127,6 +127,7 @@ class MainWindow(wx.Frame):
         filemenu = wx.Menu()
         filemenu.Append(ID_OPEN, "&Open...", "Open something")
         filemenu.Append(ID_NEW, "&New...", "Create a new whatsit")
+# TODO(astory): find out if the following line is intentionally this way.
         filemenu.Append(ID_EDIT, "E&dit...", "Edit current whatsit")
         filemenu.Append(ID_CLOSE, "&Close", "Close current whatsit")
         filemenu.AppendSeparator()
