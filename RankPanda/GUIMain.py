@@ -249,8 +249,9 @@ class MainWindow(wx.Frame):
         self.switchEndpointsButton.Bind(wx.EVT_BUTTON, self.OnSwitchEndpoints)
         self.switchLabelButton = wx.BitmapButton(self.panel, wx.ID_ANY, wx.Bitmap('icons/switchlabelicon.png'))
         self.switchLabelButton.Bind(wx.EVT_BUTTON, self.OnSwitchLabel)
-        self.deleteRankButton = wx.BitmapButton(self.panel, wx.ID_ANY, wx.Bitmap('icons/deleteicon.png'))
-        self.deleteRankButton.Bind(wx.EVT_BUTTON, self.OnDeleteRank)
+# TODO(astory): discuss whether this button should exist or not
+#        self.deleteRankButton = wx.BitmapButton(self.panel, wx.ID_ANY, wx.Bitmap('icons/deleteicon.png'))
+#        self.deleteRankButton.Bind(wx.EVT_BUTTON, self.OnDeleteRank)
         self.snapEndButton = wx.BitmapButton(self.panel, wx.ID_ANY, wx.Bitmap('icons/snaptoendicon.png'))
         self.snapEndButton.Bind(wx.EVT_BUTTON, self.OnSnapEnd)
         self.snapBeginButton = wx.BitmapButton(self.panel, wx.ID_ANY, wx.Bitmap('icons/snaptobeginicon.png'))
@@ -265,7 +266,8 @@ class MainWindow(wx.Frame):
         self.toolbar.Add(self.straightRankButton, 0, wx.EXPAND)
         self.toolbar.Add(self.switchEndpointsButton, 0, wx.EXPAND)
         self.toolbar.Add(self.switchLabelButton, 0, wx.EXPAND)
-        self.toolbar.Add(self.deleteRankButton, 0, wx.EXPAND)
+# TODO(astory): discuss whether this button should exist or not
+#        self.toolbar.Add(self.deleteRankButton, 0, wx.EXPAND)
         self.toolbar.Add(self.snapEndButton, 0, wx.EXPAND)
         self.toolbar.Add(self.snapBeginButton, 0, wx.EXPAND)
         self.toolbar.Add(self.displayAtCountButton, 0, wx.EXPAND)
