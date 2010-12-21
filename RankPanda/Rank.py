@@ -15,7 +15,9 @@ class Rank(object):
         self.hold = False
         self.grabbed = False
         self.grabbedPoint = None
+        # TODO(astory): this is never used!
         self.instrument = None
+        # TODO(astory): this is never used!
         self.listOfSelectedCommandNumbers = []
         self._labelLocation = True
 
@@ -32,8 +34,6 @@ class Rank(object):
         self.UpdateCommandList()
         if (self.GetFollowing() is not None):
             self.GetFollowing().UpdateCommandList()
-
-
     
     def GetID(self):
         """Returns the rank's _id."""
@@ -46,7 +46,6 @@ class Rank(object):
     def SetCommandList(self, commandList):
         """Set the rank's command list"""
         self._commandList = commandList
-
 
     # The next few methods are used for grabbing a rank and moving it.
     # Necessary because although a rank's _endLocation will be changing as you
@@ -182,7 +181,6 @@ class Rank(object):
             return None
         return (p.LookUpName(self._name))
 
-
     # Starting from the prior Rank's _endLocation, go through each Command in
     # the Command List, generating the end location of each, until you've used
     # up enough counts to hit the given count value.  Note that this may not be
@@ -210,7 +208,8 @@ class Rank(object):
             # TODO(astory): consider speeding up by adding whole length of
             # command if it fits in our count total
             if (countsLeft >= curCommand.GetLength()):
-                curLocation = curCommand.CalcLocation(curCommand.GetLength(), curLocation)
+                curLocation = curCommand.CalcLocation(curCommand.GetLength(),\
+                    curLocation)
             else:
                 curLocation = curCommand.CalcLocation(countsLeft, curLocation)
             countsLeft = countsLeft - curCommand.GetLength()
@@ -230,7 +229,6 @@ class Rank(object):
             loc = self.GetEndLocation()
         return loc
 
-
     # TODO(astory): clean
     # Used when a rank is moved around.  If self.hold == false and
     # self.grabbed == false, re-generate the command list.
@@ -238,8 +236,6 @@ class Rank(object):
     # Should never be called!
 #    def SetEndLocation(self, newEndLocation):
 #        pass
-
-
 
     # Adds the given command to the command list in the desired location
     # Number should be the number in the command list that the new command
@@ -333,7 +329,8 @@ class Rank(object):
             beginLocation = self.GetPrior().GetEndLocation()
         else:
             beginLocation = self._commandList[number - 1].GetEndLocation()
-        newCommand = Commands.FTA1(length, beginLocation, endLocation, listOfFTAPoints)
+        newCommand = Commands.FTA1(length, beginLocation, endLocation,\
+            listOfFTAPoints)
         self._commandList.insert(number, newCommand)
         if (name is not None):
             newCommand.SetName(name)
@@ -348,7 +345,8 @@ class Rank(object):
             beginLocation = self.GetPrior().GetEndLocation()
         else:
             beginLocation = self._commandList[number - 1].GetEndLocation()
-        newCommand = Commands.FTA0(length, beginLocation, endLocation, listOfFTAPoints)
+        newCommand = Commands.FTA0(length, beginLocation, endLocation,\
+            listOfFTAPoints)
         self._commandList.insert(number, newCommand)
         if (name is not None):
             newCommand.SetName(name)
@@ -356,7 +354,9 @@ class Rank(object):
 
     def MoveCommandUp(self, commandNumber):
         """Move commandNumber command up the command list"""
-        if ((not self.hold) or (self.GetPrior() is None) or (commandNumber == 0)):
+        if ((not self.hold)\
+                or (self.GetPrior() is None)\
+                or (commandNumber == 0)):
             return
         command = self._commandList.pop(commandNumber)
         self._commandList.insert(commandNumber - 1, command)
@@ -582,7 +582,8 @@ class Rank(object):
                 valsEnd = self._CalcLengthsHelper(endLocation, i)
                 lengthsEndMax = max(lengthsEndMax, valsEnd[0])
                 i = i + 1
-            newCommand = Commands.Curve(lengthsEndMax, beginLocation, endLocation)
+            newCommand = Commands.Curve(lengthsEndMax, beginLocation,\
+                endLocation)
             commandListSoFar.append(newCommand)
             length = length - newCommand.GetLength()
             beginLocation = newCommand.GetEndLocation()
