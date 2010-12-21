@@ -1,5 +1,3 @@
-
-
 class RankIDGen(object):
 
     def __init__(self):
