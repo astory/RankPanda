@@ -5,10 +5,6 @@ import RankLocation
 import Commands
 import math
 
-# This class represents the location of a rank that can be drawn on the screen.
-# In part, it serves as an object-oriented wrapper for the SplineGenerator
-# class.  However, it also supports straight-line ranks (only two points)
-# and ranks that aren't curved/splined (think a zigzag).
 class RankLocationError(Exception):
     """Base class for exceptions in this module"""
 class InvalidLocationListError(Exception):
@@ -16,14 +12,23 @@ class InvalidLocationListError(Exception):
     pass
 
 class RankLocation(object):
+    """Class to represent the location of a rank.
+    
+    This class represents the location of a rank that can be drawn on the
+    screen.  In part, it serves as an object-oriented wrapper for the
+    SplineGenerator class.  However, it also supports straight-line ranks (only
+    two points) and ranks that aren't curved/splined (think a zigzag).
+    """
 
-    # Pass in your list of points upon creation.  It'll auto-generate the
-    # slopes; if you'd like to artificially set the slopes list you can do it
-    # later with the SetListOfPoints() function.
-    # self.curved is true by default.
-    # self.straightLine is initialized here for organizational purposes;
-    # it's actually set in the call to self.SetListOfPoints().
     def __init__(self, listOfPoints):
+        """Generate a rank location based on a list of points
+
+        Pass in your list of points upon creation.  It'll auto-generate the
+        slopes; if you'd like to artificially set the slopes list you can do it
+        later with the SetListOfPoints() function.  self.curved is true by
+        default.  self.straightLine is initialized here for organizational
+        purposes; it's actually set in the call to self.SetListOfPoints().
+        """
         self.curved = True
         self.straightLine = True
         self._drawingPoints = []
@@ -32,8 +37,8 @@ class RankLocation(object):
         self.SetListOfPoints(listOfPoints, self._listOfSlopes)
 
 
-    # Sets if the rank is curved or zigzagged, depending on what's passed in.
     def SetCurved(self, val):
+        """Sets if the rank is curved or zigzagged."""
         self.curved = val
         self.SetListOfPoints(self._listOfPoints, self._listOfSlopes)
 
@@ -46,21 +51,27 @@ class RankLocation(object):
     def GetListOfSlopes(self):
         return copy.deepcopy(self._listOfSlopes)
 
-    # Sets the list of points and list of slopes.
-    # First, we determine if it's a straight line or not, meaning only two
-    # points.
-    # If None was passed in for the slopes, I generate a slopelist consisting
-    # of Nones, because this is the interface expected by the SplineGenerator
-    # class.
-    # I then just get the spline functions and drawing points.
-    # If it's a straight line or a zig-zag, just store the list of points.
-    # The straight lines will be drawn on the GUI end.
     def SetListOfPoints(self, listOfPoints, listOfSlopes):
+        """Sets the list of points and list of slopes.
+
+        First, we determine if it's a straight line or not, meaning only two
+        points.
+
+        If None was passed in for the slopes, we generate a slopelist consisting
+        of Nones, because this is the interface expected by the SplineGenerator
+        class.
+
+        We then just get the spline functions and drawing points.
+
+        If it's a straight line or a zig-zag, just store the list of points.
+        The straight lines will be drawn on the GUI end.
+        """
         if (len(listOfPoints) < 2):
             raise InvalidLocationListError("Tried to set a list of %d points" % len(listOfPoints))
         self._listOfPoints = listOfPoints
 
         #determine whether the rank is straight: iff there are two points
+        # TODO(astory): make this be based on collinearity
         self.straightLine = (len(listOfPoints) == 2)
 
         if ((self.curved) and (not self.straightLine)):
@@ -83,12 +94,14 @@ class RankLocation(object):
     def Clone(self):
         return copy.deepcopy(self)
 
-    # Figure out if two RankLocations represent the same locationon the field.
-    # Simply compare each point of one to each point of the other.
-    # If the slopes are different, it'll still return true.
-    # Slopes should almost always be auto generated; which means that for all
-    # practical purposes this won't affect anything.
     def CompareRankLocation(self, l2):
+        """Figure out if two RankLocations represent the same location on the field.
+
+        Simply compare each point of one to each point of the other.
+        If the slopes are different, it'll still return true.
+        Slopes should almost always be auto generated; which means that for all
+        practical purposes this won't affect anything.
+        """
         if (len(self._listOfPoints) != len(l2._listOfPoints)):
             return False
         result = True
@@ -98,9 +111,8 @@ class RankLocation(object):
             i = i + 1
         return result
 
-    # Returns the midpoint of the straight line connecting the first
-    # and last points.
     def GetMidPoint(self):
+        """The midpoint of a line connecting the first and last points."""
         p0 = self._listOfPoints[0]
         p1 = self._listOfPoints[len(self._listOfPoints) - 1]
         xmid = (p0.x + p1.x)/2
@@ -108,12 +120,17 @@ class RankLocation(object):
         return Point.Point(xmid, ymid)
 
     def _Respline(self):
-        self._splineFunctions = CubicHermiteSpline.SplineGenerator.GetSplines(self._listOfPoints, self._listOfSlopes)
+        self._splineFunctions = \
+            CubicHermiteSpline.SplineGenerator.GetSplines(self._listOfPoints,
+                                                          self._listOfSlopes)
 
-    # A straightforward function - takes in a t value, and a number in the
-    # spline list.  Depending on what kind of RankLocation it is,
-    # finds the (x,y) point at that t value.
     def GetPointAtT(self, t, number):
+        """Get the number-th point in the rank's location at time t
+        
+        A straightforward function - takes in a t value, and a number in the
+        spline list.  Depending on what kind of RankLocation it is, finds the
+        (x,y) point at that t value.
+        """
         if (self.straightLine):
             x = self._listOfPoints[0].x + t*(self._listOfPoints[1].x - self._listOfPoints[0].x)
             y = self._listOfPoints[0].y + t*(self._listOfPoints[1].y - self._listOfPoints[0].y)
@@ -130,17 +147,21 @@ class RankLocation(object):
             return Point.Point(x,y)
 
 
-    # Pass in a fraction of the total length at which you wish to get
-    # information.
-    # If the rank is curved, simply call the equivalent function in the
-    # SplineGenerator.
-    # If not, do basically the same thing that that function does, only it's
-    # easier because everything's a straight line.  Find between which two
-    # points the length fraction lies, and then find how far along is needed
-    # to get the requisite length.  From there, get x, y, dx, and dy.
-    # Return the same thing that the equivalent function in the
-    # SplineGenerator does:  [(x,y), (dx,dy), i].
     def GetInformationAtLengthFraction(self, lengthFraction):
+        """Return information at a fraction of the length of the rank
+
+        Pass in a fraction of the total length at which you wish to get
+        information.
+        If the rank is curved, simply call the equivalent function in the
+        SplineGenerator.
+        If not, do basically the same thing that that function does, only it's
+        easier because everything's a straight line.  Find between which two
+        points the length fraction lies, and then find how far along is needed
+        to get the requisite length.  From there, get x, y, dx, and dy.  Return
+        the same thing that the equivalent function in the SplineGenerator does:
+        [(x,y), (dx,dy), i].
+        """
+
         if (not self.straightLine):
             if (self.curved):
                 return CubicHermiteSpline.SplineGenerator.GetInformationAtLengthFraction(self._splineFunctions, lengthFraction)
@@ -166,10 +187,12 @@ class RankLocation(object):
         dy = (self._listOfPoints[i + 1].y - self._listOfPoints[i].y)
         return [(Point.Point(x, y)),(Point.Point(dx, dy)), i]
 
-    # Returns the lengths fractions at each point.  For instance, the first
-    # point lies at lelngth fraction 0, and the last at length fraction 1.
-    # If a point is exactly in the middle, it's at fraction 0.5.
     def GetLengthFractions(self):
+        """Returns the lengths fractions at each point. 
+        
+        The first point lies at lelngth fraction 0, and the last at length
+        fraction 1.  If a point is exactly in the middle, it's at fraction 0.5.
+        """
         fracs = []
         lengths = self.GetLengths()
         lengthtot = sum(lengths)
@@ -180,26 +203,35 @@ class RankLocation(object):
             i = i + 1
         return fracs
 
-    # Returns the length of each part of the RankLocation.
-    # Behaves differently depending on RankLocation type.  If it's curved, call
-    # the equivalent function in the SplineGenerator.
-    # If not, use the Pythogoran Theorem to find out how long each part is.
     def GetLengths(self):
+        """Returns the length of each part of the RankLocation.
+
+        Behaves differently depending on RankLocation type.  If it's curved, call
+        the equivalent function in the SplineGenerator.
+        If not, use the Pythogoran Theorem to find out how long each part is.
+        """
         if (not self.straightLine):
             if (self.curved):
-                return CubicHermiteSpline.SplineGenerator.GetLengths(self._splineFunctions)
+                return CubicHermiteSpline.SplineGenerator.GetLengths(
+                        self._splineFunctions)
         i = 1
         lengths = []
         while (i < len(self._listOfPoints)):
-            lengths.append(math.sqrt((self._listOfPoints[i - 1].x - self._listOfPoints[i].x)*(self._listOfPoints[i - 1].x - self._listOfPoints[i].x) + (self._listOfPoints[i - 1].y - self._listOfPoints[i].y)*(self._listOfPoints[i - 1].y - self._listOfPoints[i].y)))
-            i = i + 1
+            lengths.append(
+                math.sqrt(
+                    (self._listOfPoints[i - 1].x - self._listOfPoints[i].x) *
+                    (self._listOfPoints[i - 1].x - self._listOfPoints[i].x) +
+                    (self._listOfPoints[i - 1].y - self._listOfPoints[i].y) *
+                    (self._listOfPoints[i - 1].y - self._listOfPoints[i].y)))
+            i += 1
         return lengths
 
 
-    # If the input is a translated version of self, returns the amount it's
-    # been translated by as a Point.  Returns input - self.
-    # Else, returns None.
     def IsTranslated(self, l2):
+        """ If the input is a translated version of self, returns the amount
+        it's been translated by as a Point.  Returns input - self.  Else,
+        returns None.
+        """
         myList = self._listOfPoints
         otherList = l2.GetListOfPoints()
         if (len(myList) != len(otherList)):
@@ -217,15 +249,17 @@ class RankLocation(object):
             else:
                 return None
 
-    # Switch the endpoints by reversing the entire list
     def SwitchEndpoints(self):
+        """Switch the endpoints by reversing the entire list"""
         self._listOfPoints.reverse()
         self.SetListOfPoints(self._listOfPoints, self._listOfSlopes)
 
-    # Returns true if all the points are on top of each other and the rank
-    # is of length 0.
+    # TODO(astory):  make safe for empty lists
     @classmethod
     def IsListOfPointsLengthZero(cls, pointList):
+        """Returns true if all the points are on top of each other and the rank
+        is of length 0.
+        """
         p0 = pointList[0]
         status = True
         i = 1
