@@ -688,7 +688,7 @@ class CoreWrapper(object):
     def RankDrawn(self, listOfPoints):
         if (self._song.currentMove is None):
             return None
-        if (not RankLocation.RankLocation.IsListOfPointsLengthZero(listOfPoints)):  #((((listOfPoints[1].x - listOfPoints[0].x)*(listOfPoints[1].x - listOfPoints[0].x)) + ((listOfPoints[1].y - listOfPoints[0].y)*(listOfPoints[1].y - listOfPoints[0].y))) > 0):
+        if (not RankLocation.IsListOfPointsLengthZero(listOfPoints)):  #((((listOfPoints[1].x - listOfPoints[0].x)*(listOfPoints[1].x - listOfPoints[0].x)) + ((listOfPoints[1].y - listOfPoints[0].y)*(listOfPoints[1].y - listOfPoints[0].y))) > 0):
             r = self._song.currentMove.CreateRank(RankLocation.RankLocation(listOfPoints), None)
         else:
             return None
@@ -745,7 +745,7 @@ class CoreWrapper(object):
             return None
         pointList = copy.deepcopy(self._song.currentMove.LookUpID(rankID).GetEndLocation().GetListOfPoints())
         pointList[number] = Point.Point(pointList[number].x + dx, pointList[number].y + dy)
-        if (not RankLocation.RankLocation.IsListOfPointsLengthZero(pointList)):
+        if (not RankLocation.IsListOfPointsLengthZero(pointList)):
             self._song.currentMove.LookUpID(rankID).PointDragged(dx, dy)
         else:
             self.RankDeleted(rankID)

@@ -46,6 +46,12 @@ class Point(object):
         """
         return Distance(self, p1) < epsilon
 
+    def __eq__(self, other):
+        return self.CompareTo(other, epsilon=0.00001)
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def Clone(self):
         """Produce a deep copy of this point"""
         return Point(self.x, self.y)

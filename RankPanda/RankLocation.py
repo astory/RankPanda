@@ -11,6 +11,37 @@ class InvalidLocationListError(Exception):
     """Exception raised for invalid location lists"""
     pass
 
+def Compare(l1, l2):
+    """Figure out if two RankLocations represent the same location on the field.
+
+    Simply compare each point of one to each point of the other.
+    If the slopes are different, it'll still return true.
+    Slopes should almost always be auto generated; which means that for all
+    practical purposes this won't affect anything.
+    """
+    if (len(l1._listOfPoints) != len(l2._listOfPoints)):
+        return False
+    result = True
+    i = 0
+    while ((result) and (i < len(l1._listOfPoints))):
+        result = l1._listOfPoints[i].CompareTo(l2._listOfPoints[i])
+        i = i + 1
+    return result
+
+def IsListOfPointsLengthZero(pointList):
+    """Returns true if all the points are on top of each other and the rank
+    is of length 0.
+    """
+    if not pointList:
+        return True
+    p0 = pointList[0]
+    status = True
+    i = 1
+    while (status and (i < len(pointList))):
+        status = status and p0.CompareTo(pointList[i])
+        i = i + 1
+    return status
+
 class RankLocation(object):
     """Class to represent the location of a rank.
     
@@ -20,16 +51,16 @@ class RankLocation(object):
     two points) and ranks that aren't curved/splined (think a zigzag).
     """
 
-    def __init__(self, listOfPoints):
+    def __init__(self, listOfPoints, curved=True):
         """Generate a rank location based on a list of points
 
         Pass in your list of points upon creation.  It'll auto-generate the
         slopes; if you'd like to artificially set the slopes list you can do it
-        later with the SetListOfPoints() function.  self.curved is true by
-        default.  self.straightLine is initialized here for organizational
-        purposes; it's actually set in the call to self.SetListOfPoints().
+        later with the SetListOfPoints() function.self.straightLine is
+        initialized here for organizational purposes; it's actually set in the
+        call to self.SetListOfPoints().
         """
-        self.curved = True
+        self.curved = curved
         self.straightLine = True
         self._drawingPoints = []
         self._splineFunctions = None
@@ -95,21 +126,7 @@ class RankLocation(object):
         return copy.deepcopy(self)
 
     def CompareRankLocation(self, l2):
-        """Figure out if two RankLocations represent the same location on the field.
-
-        Simply compare each point of one to each point of the other.
-        If the slopes are different, it'll still return true.
-        Slopes should almost always be auto generated; which means that for all
-        practical purposes this won't affect anything.
-        """
-        if (len(self._listOfPoints) != len(l2._listOfPoints)):
-            return False
-        result = True
-        i = 0
-        while ((result) and (i < len(self._listOfPoints))):
-            result = self._listOfPoints[i].CompareTo(l2._listOfPoints[i])
-            i = i + 1
-        return result
+        return Compare(self, l2)
 
     def GetMidPoint(self):
         """The midpoint of a line connecting the first and last points."""
@@ -254,16 +271,3 @@ class RankLocation(object):
         self._listOfPoints.reverse()
         self.SetListOfPoints(self._listOfPoints, self._listOfSlopes)
 
-    # TODO(astory):  make safe for empty lists
-    @classmethod
-    def IsListOfPointsLengthZero(cls, pointList):
-        """Returns true if all the points are on top of each other and the rank
-        is of length 0.
-        """
-        p0 = pointList[0]
-        status = True
-        i = 1
-        while (status and (i < len(pointList))):
-            status = status and p0.CompareTo(pointList[i])
-            i = i + 1
-        return status
