@@ -15,7 +15,6 @@ class Testrl(unittest.TestCase):
         instance = rl.RankLocation(points, curved=True)
         self.assertEqual(instance._listOfPoints, points)
         self.assertTrue(instance.curved)
-        self.assertFalse(instance.straightLine)
 
     def testInitZigZag(self):
         points = MakePoints([(1,2), (3,4), (5,6), (7,8)])
@@ -23,7 +22,6 @@ class Testrl(unittest.TestCase):
         instance = rl.RankLocation(points, curved=False)
         self.assertEqual(instance._listOfPoints, points)
         self.assertFalse(instance.curved)
-        self.assertFalse(instance.straightLine)
 
     def testInitStraight(self):
         points = MakePoints([(1,2), (3,4)])
@@ -31,7 +29,6 @@ class Testrl(unittest.TestCase):
         instance = rl.RankLocation(points, curved=True)
         self.assertEqual(instance._listOfPoints, points)
         self.assertTrue(instance.curved)
-        self.assertTrue(instance.straightLine)
 
     def testCompare(self):
         l1 = rl.RankLocation(MakePoints([(1,2), (3,4)]))
@@ -62,6 +59,15 @@ class Testrl(unittest.TestCase):
         self.assertTrue(f(MakePoints([(0,0), (0,0)])))
         self.assertFalse(f(MakePoints([(0,0), (0,1)])))
         self.assertFalse(f(MakePoints([(0,0), (0,1), (0,0)])))
+	
+	def testIsStraight(self):
+		p1 = p.Point(0,0)
+		p2 = p.Point(1,1)
+		p3 = p.point(0,1)
+		# TODO(astory): include collinearity
+
+		self.assertTrue(rl.RankLocation([p1, p2]).IsStraight())
+		self.assertFalse(rl.RankLocation([p1, p3, p2]).IsStraight())
 
 if __name__ == '__main__':
     unittest.main()

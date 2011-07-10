@@ -564,7 +564,7 @@ class Field(wx.Panel):
             arrow_separation = ARROW_SEPARATION
             arrow_length = ARROW_LENGTH
 
-        if loc.straightLine:
+        if loc.IsStraight():
             pts = self.TList(rect, loc.GetListOfPoints())
 
             dc.SetPen(wx.Pen(colour, 0))
@@ -728,7 +728,7 @@ class Field(wx.Panel):
         for r in ranks:
             loc = r[2]
 
-            if loc.straightLine:
+            if loc.IsStraight():
                 pts = loc.GetListOfPoints()
                 if self.PickLine(((pts[0].x, pts[0].y), (pts[1].x, pts[1].y)), (x, y), self.R(self.fieldRect, LINE_WIDTH)):
                     return r[0]
@@ -755,7 +755,7 @@ class Field(wx.Panel):
             loc = r[2]
             pts = loc.GetListOfPoints()
 
-            if loc.straightLine:
+            if loc.IsStraight():
                 if self.PickCircle((pts[0].x, pts[0].y), (x, y), self.R(self.fieldRect, ENDPOINT_RADIUS)):
                     return (r[0], 0)
                 if self.PickCircle((pts[1].x, pts[1].y), (x, y), self.R(self.fieldRect, ENDPOINT_RADIUS)):

@@ -552,7 +552,7 @@ class Rank(object):
         commandListSoFar = []
         beginPointList = beginLocation.GetListOfPoints()
         endPointList = endLocation.GetListOfPoints()
-        if (not beginLocation.straightLine):
+        if (not beginLocation.IsStraight()):
             i = 1
             lengthsBeginMax = 0
             while (i < (len(beginPointList) - 1)):
@@ -575,7 +575,7 @@ class Rank(object):
         length = commandListSoFarTuple[1]
         beginLocation = commandListSoFarTuple[2]
 
-        if (not endLocation.straightLine):
+        if (not endLocation.IsStraight()):
             i = 1
             lengthsEndMax = 0
             while (i < (len(endPointList) - 1)):

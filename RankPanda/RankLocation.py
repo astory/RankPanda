@@ -1,6 +1,6 @@
 import copy
 import Point
-import CubicHermiteSpline
+import CubicHermiteSpline as CHS
 import RankLocation
 import Commands
 import math
@@ -56,12 +56,9 @@ class RankLocation(object):
 
         Pass in your list of points upon creation.  It'll auto-generate the
         slopes; if you'd like to artificially set the slopes list you can do it
-        later with the SetListOfPoints() function.self.straightLine is
-        initialized here for organizational purposes; it's actually set in the
-        call to self.SetListOfPoints().
+        later with the SetListOfPoints() function.
         """
         self.curved = curved
-        self.straightLine = True
         self._drawingPoints = []
         self._splineFunctions = None
         self._listOfSlopes = None
@@ -98,14 +95,11 @@ class RankLocation(object):
         The straight lines will be drawn on the GUI end.
         """
         if (len(listOfPoints) < 2):
-            raise InvalidLocationListError("Tried to set a list of %d points" % len(listOfPoints))
+            raise InvalidLocationListError("Tried to set a list of %d points"
+                                           % len(listOfPoints))
         self._listOfPoints = listOfPoints
 
-        #determine whether the rank is straight: iff there are two points
-        # TODO(astory): make this be based on collinearity
-        self.straightLine = (len(listOfPoints) == 2)
-
-        if ((self.curved) and (not self.straightLine)):
+        if ((self.curved) and (not self.IsStraight())):
             if (listOfSlopes is None):
                 i = 0
                 self._listOfSlopes = []
@@ -114,13 +108,20 @@ class RankLocation(object):
                     i = i + 1
             else:
                 self._listOfSlopes = listOfSlopes
-            self._splineFunctions = CubicHermiteSpline.SplineGenerator.GetSplines(self._listOfPoints, self._listOfSlopes)
-            self._drawingPoints = CubicHermiteSpline.SplineGenerator.GetPoints(self._splineFunctions)
+            self._splineFunctions = \
+                CHS.SplineGenerator.GetSplines(self._listOfPoints,
+                                               self._listOfSlopes)
+            self._drawingPoints = \
+                CHS.SplineGenerator.GetPoints(self._splineFunctions)
         else:
             self._listOfSlopes = None
             self._splineFunctions = None
             self._drawingPoints = None
 
+    def IsStraight(self):
+        """Determine whether the rank is straight: iff there are two points."""
+        # TODO(astory): make this be based on collinearity
+        return len(self._listOfPoints) == 2
 
     def Clone(self):
         return copy.deepcopy(self)
@@ -138,7 +139,7 @@ class RankLocation(object):
 
     def _Respline(self):
         self._splineFunctions = \
-            CubicHermiteSpline.SplineGenerator.GetSplines(self._listOfPoints,
+            CHS.SplineGenerator.GetSplines(self._listOfPoints,
                                                           self._listOfSlopes)
 
     def GetPointAtT(self, t, number):
@@ -148,7 +149,7 @@ class RankLocation(object):
         spline list.  Depending on what kind of RankLocation it is, finds the
         (x,y) point at that t value.
         """
-        if (self.straightLine):
+        if (self.IsStraight()):
             x = self._listOfPoints[0].x + t*(self._listOfPoints[1].x - self._listOfPoints[0].x)
             y = self._listOfPoints[0].y + t*(self._listOfPoints[1].y - self._listOfPoints[0].y)
             return Point.Point(x,y)
@@ -159,8 +160,8 @@ class RankLocation(object):
             y = pfirst.y + t*(psecond.y - pfirst.y)
             return Point.Point(x,y)
         else:
-            x = CubicHermiteSpline.SplineGenerator.EvalCubic(t, self._splineFunctions[number][0])
-            y = CubicHermiteSpline.SplineGenerator.EvalCubic(t, self._splineFunctions[number][1])
+            x = CHS.SplineGenerator.EvalCubic(t, self._splineFunctions[number][0])
+            y = CHS.SplineGenerator.EvalCubic(t, self._splineFunctions[number][1])
             return Point.Point(x,y)
 
 
@@ -179,9 +180,9 @@ class RankLocation(object):
         [(x,y), (dx,dy), i].
         """
 
-        if (not self.straightLine):
+        if (not self.IsStraight()):
             if (self.curved):
-                return CubicHermiteSpline.SplineGenerator.GetInformationAtLengthFraction(self._splineFunctions, lengthFraction)
+                return CHS.SplineGenerator.GetInformationAtLengthFraction(self._splineFunctions, lengthFraction)
 
         lengths = self.GetLengths()
         totalLength = sum(lengths)
@@ -227,9 +228,9 @@ class RankLocation(object):
         the equivalent function in the SplineGenerator.
         If not, use the Pythogoran Theorem to find out how long each part is.
         """
-        if (not self.straightLine):
+        if (not self.IsStraight()):
             if (self.curved):
-                return CubicHermiteSpline.SplineGenerator.GetLengths(
+                return CHS.SplineGenerator.GetLengths(
                         self._splineFunctions)
         i = 1
         lengths = []
