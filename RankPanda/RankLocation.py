@@ -21,12 +21,10 @@ def Compare(l1, l2):
     """
     if (len(l1._listOfPoints) != len(l2._listOfPoints)):
         return False
-    result = True
-    i = 0
-    while ((result) and (i < len(l1._listOfPoints))):
-        result = l1._listOfPoints[i].CompareTo(l2._listOfPoints[i])
-        i = i + 1
-    return result
+    for (p1, p2) in zip(l1._listOfPoints, l2._listOfPoints):
+        if p1 != p2:
+            return False
+    return True
 
 def IsListOfPointsLengthZero(pointList):
     """Returns true if all the points are on top of each other and the rank
