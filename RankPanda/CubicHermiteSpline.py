@@ -16,6 +16,9 @@ import Point
 # the one next to them, as the slopes are equal.
 # The splines are saved in a simple format; see below.
 
+# TODO(astory): convert to module level functions.  None of these actually take
+# advantage of, or have any reason for, being in a class.
+
 class SplineGenerator:
 
     # This calculated what the slopes at the points should be for the splines.
