@@ -7,7 +7,7 @@ import math
 
 class RankLocationError(Exception):
     """Base class for exceptions in this module"""
-class InvalidLocationListError(Exception):
+class InvalidLocationListError(RankLocationError):
     """Exception raised for invalid location lists"""
     pass
 
