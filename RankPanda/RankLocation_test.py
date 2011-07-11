@@ -63,7 +63,7 @@ class Testrl(unittest.TestCase):
     def testIsStraight(self):
         p1 = p.Point(0,0)
         p2 = p.Point(1,1)
-        p3 = p.oint(0,1)
+        p3 = p.Point(0,1)
         # TODO(astory): include collinearity
 
         self.assertTrue(rl.RankLocation([p1, p2]).IsStraight())
@@ -84,6 +84,31 @@ class Testrl(unittest.TestCase):
             self.fail()
         except rl.InvalidLocationListError:
             pass
+
+    def testSetListOfPointsStraight(self):
+        p1 = p.Point(0,0)
+        p2 = p.Point(0,1)
+        p3 = p.Point(1,1)
+        p4 = p.Point(1,2)
+        loc = rl.RankLocation([p1,p2], None)
+
+        loc.SetListOfPoints([p3,p4])
+        self.assertEqual(None, loc._listOfSlopes)
+        self.assertEqual(None, loc._splineFunctions)
+        self.assertEqual(None, loc._drawingPoints)
+
+    def testSetListOfPointsStraight(self):
+        p1 = p.Point(0,0)
+        p2 = p.Point(0,1)
+        p3 = p.Point(1,1)
+        p4 = p.Point(1,2)
+        loc = rl.RankLocation([p1,p2], curved=False)
+
+        loc.SetListOfPoints([p1,p2,p3,p4], None)
+        self.assertEqual(None, loc._listOfSlopes)
+        self.assertEqual(None, loc._splineFunctions)
+        self.assertEqual(None, loc._drawingPoints)
+
 
 if __name__ == '__main__':
     unittest.main()
