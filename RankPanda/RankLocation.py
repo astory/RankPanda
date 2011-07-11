@@ -133,7 +133,7 @@ class RankLocation(object):
     def _Respline(self):
         self._splineFunctions = \
             CHS.SplineGenerator.GetSplines(self._listOfPoints,
-                                                          self._listOfSlopes)
+                                           self._listOfSlopes)
 
     def GetPointAtT(self, t, number):
         """Get the number-th point in the rank's location at time t
