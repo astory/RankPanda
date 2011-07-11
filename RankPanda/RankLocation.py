@@ -33,12 +33,10 @@ def IsListOfPointsLengthZero(pointList):
     if not pointList:
         return True
     p0 = pointList[0]
-    status = True
-    i = 1
-    while (status and (i < len(pointList))):
-        status = status and p0.CompareTo(pointList[i])
-        i = i + 1
-    return status
+    for p in pointList:
+        if p != p0:
+            return False
+    return True
 
 class RankLocation(object):
     """Class to represent the location of a rank.
