@@ -40,7 +40,7 @@ def IsListOfPointsLengthZero(pointList):
 
 class RankLocation(object):
     """Class to represent the location of a rank.
-    
+
     This class represents the location of a rank that can be drawn on the
     screen.  In part, it serves as an object-oriented wrapper for the
     SplineGenerator class.  However, it also supports straight-line ranks (only
@@ -97,13 +97,10 @@ class RankLocation(object):
 
         if ((self.curved) and (not self.IsStraight())):
             if (listOfSlopes is None):
-                i = 0
-                self._listOfSlopes = []
-                while (i < len(listOfPoints)):
-                    self._listOfSlopes.append(None)
-                    i = i + 1
+                self._listOfSlopes = [None for _ in listOfPoints]
             else:
                 self._listOfSlopes = listOfSlopes
+
             self._splineFunctions = \
                 CHS.SplineGenerator.GetSplines(self._listOfPoints,
                                                self._listOfSlopes)
@@ -140,7 +137,7 @@ class RankLocation(object):
 
     def GetPointAtT(self, t, number):
         """Get the number-th point in the rank's location at time t
-        
+
         A straightforward function - takes in a t value, and a number in the
         spline list.  Depending on what kind of RankLocation it is, finds the
         (x,y) point at that t value.
@@ -202,8 +199,8 @@ class RankLocation(object):
         return [(Point.Point(x, y)),(Point.Point(dx, dy)), i]
 
     def GetLengthFractions(self):
-        """Returns the lengths fractions at each point. 
-        
+        """Returns the lengths fractions at each point.
+
         The first point lies at lelngth fraction 0, and the last at length
         fraction 1.  If a point is exactly in the middle, it's at fraction 0.5.
         """
