@@ -1,2 +1,4 @@
-#Automatically compiled python files
+# Automatically compiled python files
 *.pyc
+# Vim swap files
+*.sw[a-z]
