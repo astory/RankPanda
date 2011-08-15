@@ -7,7 +7,7 @@ import RankLocation as rl
 def MakePoints(points):
     return [p.Point(x,y) for (x,y) in points]
 
-class Testrl(unittest.TestCase):
+class TestRankLocation(unittest.TestCase):
 
     def testInitWavy(self):
         points = MakePoints([(1,2), (3,4), (5,6), (7,8)])
