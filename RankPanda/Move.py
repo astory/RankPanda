@@ -3,7 +3,11 @@ import Rank
 import pprint
 
 
+# TODO(astory): look into python attributes.  If we're going to go with
+# heavyweight java-style classes, we might as well let python do the heavy
+# lifting and code generation.
 class Move(object):
+    # TODO(astory): optional arguments
     def __init__(self, startCount, length, prior, following, number):
         self._startCount = startCount
         self._length = length
@@ -53,7 +57,9 @@ class Move(object):
         return self._number
 
     def SetNumber(self, number):
-        if ((self._name is None) or (self._name == ('Move ' + str(self._number)))):
+        if (number is not None and
+                ((self._name is None) or
+                (self._name == ('Move ' + str(self._number))))):
             self._name = ('Move ' + str(number))
         self._number = number
 
@@ -111,7 +117,6 @@ class Move(object):
         Creates a new rank and adds it to the IDRankIndex.  Names the rank if a
         name is given.
         """
-
         r = Rank.Rank(location, self)
         self._idRankIndex[r.GetID()] = r
         if (name is not None):
