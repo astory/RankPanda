@@ -110,7 +110,7 @@ class Song(object):
             if ((self._moveList[i - 1].GetStartCount() + self._moveList[i - 1].GetLength()) == (startCount)):
                 prior = self._moveList[i - 1]
                 settingPrior = True
-        newMove = Move.Move(startCount, (endCount - startCount), self, prior, following, i)
+        newMove = Move.Move(startCount, (endCount - startCount), prior, following, i)
         self._moveList.insert(i, newMove)
         if (settingFollowing):
             self._moveList[i + 1].SetPrior(newMove)

@@ -4,10 +4,9 @@ import pprint
 
 
 class Move(object):
-    def __init__(self, startCount, length, song, prior, following, number):
+    def __init__(self, startCount, length, prior, following, number):
         self._startCount = startCount
         self._length = length
-        self._song = song
         self._idRankIndex = dict()
         self._nameRankIndex = dict()
         self._RankIDGen = RankIDGen.RankIDGen()
@@ -105,12 +104,6 @@ class Move(object):
     def SetFollowing(self, following):
         self._following = following
 
-    # Possibly useful for a rank to call.  Note that we treat song as immutable
-    # because it doesn't make sense for a move to change its song.
-    # TODO(astory): rearchitect out of existence.
-    def GetSong(self):
-        return self._song
-
     # TODO(astory): make name an optional argument
     def CreateRank(self, location, name):
         """Create a new rank for this move.
@@ -176,7 +169,6 @@ class Move(object):
         following = self.GetFollowing()
         newMove = Move(prior._startCount,
                        (prior._length + self._length),
-                       self._song,
                        priorprior,
                        following,
                        prior.GetNumber())
@@ -256,10 +248,10 @@ class Move(object):
         Returns:
             A list of the two new moves created
         """
-        newMoveFirst = Move(self._startCount, count, self._song, self._prior,
+        newMoveFirst = Move(self._startCount, count, self._prior,
                             None, self.GetNumber())
         newMoveSecond = Move((self._startCount + count), (self._length - count),
-                             self._song, newMoveFirst, self._following,
+                             newMoveFirst, self._following,
                              (self.GetNumber() + 1))
         newMoveFirst.SetFollowing(newMoveSecond)
         if (self._prior is not None):
