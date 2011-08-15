@@ -192,7 +192,7 @@ class Tester(object):
             print('Done!')
         except:
             j = 0
-            while (i < 10000):
+            while (j < 10000):
                 print('j = ' + str(j))
                 j = j + 1
         finally:
