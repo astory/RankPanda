@@ -21,15 +21,12 @@ class Move(object):
         self._moveText = None
         self._moveTextOverwrite = None
 
-
-
     def GetNameRankIndex(self):
         return self._nameRankIndex
 
-    # Simple - return the count at which the move starts.
     def GetStartCount(self):
         return self._startCount
-    # Also striaghtforward.
+
     def SetStartCount(self, startCount):
         self._startCount = startCount
 
@@ -41,14 +38,12 @@ class Move(object):
 
     def SetSelectedRanks(self, newList):
         self._listOfActiveRanks = newList
-    # Simple
+
     def GetLength(self):
         return self._length
 
-    # Not as simple.  If the length has increased, any command lists that
-    # are being auto-generated need to be padded out with MT.  If the length
-    # has decreased, this will need a flag somewhere.
     def SetLength(self, newLength):
+        """Set length of move to newLength and update all ranks' commands."""
         self._length = newLength
         self.UpdateAllRanksCommandList()
 
@@ -69,19 +64,15 @@ class Move(object):
     def SetName(self, name):
         self._name = name
 
-    # Return what's in the current self._prior field.
     def GetPrior(self):
         return self._prior
 
-    # Sets the self._prior field.  Goes through both self and _prior's
-    # namrRankIndex.  If any ranks have a name in both, auto-generate the
-    # commands.
     def SetPrior(self, newPrior):
+        """Set the prior move to this move and update all ranks' commands."""
         self._prior = newPrior
         self.UpdateAllRanksCommandList()
 
-
-    # Returns a list of all Ranks
+    # TODO(astory): make sane
     def GetAllRanks(self):
         allRanks = []
         i = 0
@@ -90,7 +81,6 @@ class Move(object):
             allRanks.append(items[i][1])
             i = i + 1
         return allRanks
-
 
     def GetAllNamedRanks(self):
         allNamedRanks = []
@@ -109,27 +99,26 @@ class Move(object):
             items[i][1].UpdateCommandList()
             i = i + 1
 
-
-    # Return what's in the self._following field.
     def GetFollowing(self):
         return self._following
 
-    # Sets the self._following field.  Unlike setting self._prior, this one
-    # doesn't really matter.
     def SetFollowing(self, following):
         self._following = following
 
-    # Returns the current song.  Possibly useful for a rank to call.
+    # Possibly useful for a rank to call.  Note that we treat song as immutable
+    # because it doesn't make sense for a move to change its song.
+    # TODO(astory): rearchitect out of existence.
     def GetSong(self):
         return self._song
 
-    #Should never be called.
-#    def SetSong(self):
-#        pass
-
-    # Creates a new rank and adds it to the IDRankIndex.
-    # If name is not None, call self.NameRank(name).
+    # TODO(astory): make name an optional argument
     def CreateRank(self, location, name):
+        """Create a new rank for this move.
+
+        Creates a new rank and adds it to the IDRankIndex.  Names the rank if a
+        name is given.
+        """
+
         r = Rank.Rank(location, self)
         self._idRankIndex[r.GetID()] = r
         if (name is not None):
@@ -137,8 +126,8 @@ class Move(object):
         r.UpdateCommandList()
         return r
 
-    # Sets the name field of a rank.
     def NameRank(self, ID, name):
+        """Set the name of a rank in this move."""
         if (self.LookUpName(name) is None):
             r = self._idRankIndex[ID]
             if (r.GetName() in self._nameRankIndex):
@@ -149,7 +138,9 @@ class Move(object):
     # Deletes a rank.  Note that this will also need to reset the command list
     # for the rank in the following move, if applicable.
     def DeleteRank(self, id):
+        """Delete a rank, and update the following move's corresponding rank."""
         r = self._idRankIndex[id]
+        # TODO(astory): if r in _listOfActiveRanks
         if (self._listOfActiveRanks.count(r) != 0):
             self._listOfActiveRanks.remove(r)
         del self._idRankIndex[id]
@@ -169,16 +160,26 @@ class Move(object):
             self.DeleteRank(ID)
             i = i + 1
 
-
-    # See song.MergeMoves() for relevant documentation.
-    # Returns the new move created.  Also resets the prior and following
-    # references of the moves before and after the set being merged.
-    # Does not do anything to any data structures in Song.
+    # TODO(astory): this is ugly, and also possibly crash-laden.  FIXME
     def MergeWithPrior(self):
+        """Merge this move with the previous one.
+
+        See song.MergeMoves() for more documentation.  Also resets the prior and
+        following references of moves immediately before and after the merged
+        moves.
+
+        Returns:
+            The new move created
+        """
         prior = self.GetPrior()
         priorprior = prior.GetPrior()
         following = self.GetFollowing()
-        newMove = Move(prior._startCount, (prior._length + self._length), self._song, priorprior, following, prior.GetNumber())
+        newMove = Move(prior._startCount,
+                       (prior._length + self._length),
+                       self._song,
+                       priorprior,
+                       following,
+                       prior.GetNumber())
         if (priorprior is not None):
             priorprior.SetFollowing(newMove)
         if (following is not None):
@@ -211,7 +212,9 @@ class Move(object):
                     PriorIDMarkedIndex[oldID] = True
                     if (oldoldRank is not None):
                         if (newRank.hold):
-                            newRank.SetCommandList(oldRank.GetCommandList().extend(rank.GetCommandList()))
+                            newRank.SetCommandList(
+                                oldRank.GetCommandList().extend(
+                                    rank.GetCommandList()))
                         else:
                             newRank.UpdateCommandList()
             i = i + 1
@@ -243,11 +246,21 @@ class Move(object):
             i = i + 1
         return newMove
 
-
-    # Same as Merge() but for splitting
+    # TODO(astory): really?  return a list?  FIXME
     def Split(self, count):
-        newMoveFirst = Move(self._startCount, count, self._song, self._prior, None, self.GetNumber())
-        newMoveSecond = Move((self._startCount + count), (self._length - count), self._song, newMoveFirst, self._following, (self.GetNumber() + 1))
+        """Split this move at count.
+
+        Also resets the prior and following references of moves immediately
+        before and after the split move.
+
+        Returns:
+            A list of the two new moves created
+        """
+        newMoveFirst = Move(self._startCount, count, self._song, self._prior,
+                            None, self.GetNumber())
+        newMoveSecond = Move((self._startCount + count), (self._length - count),
+                             self._song, newMoveFirst, self._following,
+                             (self.GetNumber() + 1))
         newMoveFirst.SetFollowing(newMoveSecond)
         if (self._prior is not None):
             self._prior.SetFollowing(newMoveFirst)
@@ -261,7 +274,8 @@ class Move(object):
             name = rank.GetName()
             newMoveFirst.CreateRank(rank.GetCalculatedLocation(count), name)
             newMoveSecond.CreateRank(rank.GetEndLocation(), name)
-            if ((rank.hold) and (rank.GetName() is not None) and (self._prior.LookUpName(name) is not None)):
+            if ((rank.hold) and (rank.GetName() is not None) and
+                (self._prior.LookUpName(name) is not None)):
                 newRank1 = newMoveFirst.LookUpName(name)
                 newRank2 = newMoveSecond.LookUpName(name)
                 newRank1.hold = rank.hold
@@ -284,19 +298,15 @@ class Move(object):
             i = i + 1
         return [newMoveFirst, newMoveSecond]
 
-
-    # Passed in a name, returns the Rank object associated with it in the
-    # current move.  Returns None if this does not exist.
     def LookUpName(self, name):
+        """Return the rank with name in this move, or None."""
         if (name in self._nameRankIndex):
             return self._nameRankIndex[name]
         else:
             return None
 
-    # Passed in an ID, returns the Rank object associated with it in the
-    # current move.  Returns None if this does not exist.
-
     def LookUpID(self, ID):
+        """Return the rank with ID in this move, or None."""
         if (ID in self._idRankIndex):
             return self._idRankIndex[ID]
         else:
@@ -313,4 +323,3 @@ class Move(object):
 
     def SetMoveTextOverwrite(self, moveTextOverwrite):
         self._moveTextOverwrite = moveTextOverwrite
-
