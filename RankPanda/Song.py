@@ -166,7 +166,9 @@ class Song(object):
         i = 0
         allRanks = self._moveList[sourceNumber].GetAllRanks()
         while (i < len(allRanks)):
-            self._moveList[recieveNumber].CreateRank(copy.deepcopy(allRanks[i].GetEndLocation()), allRanks[i].GetName())
+            self._moveList[recieveNumber].CreateRank(
+                    copy.deepcopy(allRanks[i].GetEndLocation()),
+                    name=allRanks[i].GetName())
             i = i + 1
 
 

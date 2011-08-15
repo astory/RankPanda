@@ -111,7 +111,7 @@ class Move(object):
         self._following = following
 
     # TODO(astory): make name an optional argument
-    def CreateRank(self, location, name):
+    def CreateRank(self, location, name=None):
         """Create a new rank for this move.
 
         Creates a new rank and adds it to the IDRankIndex.  Names the rank if a
@@ -194,7 +194,7 @@ class Move(object):
         while (i < l):
             rank = Iterator[i][1]
             name = rank.GetName()
-            newMove.CreateRank(rank.GetEndLocation(), name)
+            newMove.CreateRank(rank.GetEndLocation(), name=name)
             if (name is not None):
                 oldRank = prior.LookUpName(name)
                 if (priorprior is not None):
@@ -225,7 +225,7 @@ class Move(object):
                 ID = Iterator[i][0]
                 rank = prior.LookUpID(ID)
                 name = rank.GetName()
-                newMove.CreateRank(rank.GetEndLocation(), name)
+                newMove.CreateRank(rank.GetEndLocation(), name=name)
                 newRank = newMove.LookUpName(name)
                 newRank.hold = rank.hold
                 if (name is not None):
@@ -269,8 +269,8 @@ class Move(object):
         while (i < l):
             rank = Iterator[i][1]
             name = rank.GetName()
-            newMoveFirst.CreateRank(rank.GetCalculatedLocation(count), name)
-            newMoveSecond.CreateRank(rank.GetEndLocation(), name)
+            newMoveFirst.CreateRank(rank.GetCalculatedLocation(count), name=name)
+            newMoveSecond.CreateRank(rank.GetEndLocation(), name=name)
             if ((rank.hold) and (rank.GetName() is not None) and
                 (self._prior.LookUpName(name) is not None)):
                 newRank1 = newMoveFirst.LookUpName(name)

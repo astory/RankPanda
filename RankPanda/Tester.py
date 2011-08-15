@@ -56,8 +56,8 @@ class Tester(object):
 
         location1 = RankLocation.RankLocation([Point.Point(100,100), Point.Point(116,100)])
         location3 = RankLocation.RankLocation([Point.Point(200,200), Point.Point(216, 200)])
-        r1 = song.currentMove.CreateRank(location1, None)
-        r3 = song.currentMove.CreateRank(location3, None)
+        r1 = song.currentMove.CreateRank(location1)
+        r3 = song.currentMove.CreateRank(location3)
         r3ID = r3.GetID()
         song.GetCurrentMove().NameRank(r1.GetID(), 'A')
         print('ID = ' + str(r1.GetID()))
@@ -65,7 +65,7 @@ class Tester(object):
         song.SetCurrentMove(1)
         location2 = RankLocation.RankLocation([Point.Point(100,100), Point.Point(100,116)])
         print("location2's midpoint = " + str(location2.GetMidPoint().x) + ', ' + str(location2.GetMidPoint().y))
-        r2 = song.currentMove.CreateRank(location2, None)
+        r2 = song.currentMove.CreateRank(location2)
         song.GetCurrentMove().NameRank(r1.GetID(), 'A')
 
         print('ID = ' + str(r2.GetID()))
@@ -145,8 +145,8 @@ class Tester(object):
         move1 = song.GetMoveList()[1]
         loc0 = RankLocation.RankLocation([Point.Point(100, 100), Point.Point(116, 100)])
         loc1 = RankLocation.RankLocation([Point.Point(100, 116), Point.Point(116, 116)])
-        r0 = move0.CreateRank(loc0, 'A')
-        r1 = move1.CreateRank(loc1, 'A')
+        r0 = move0.CreateRank(loc0, name='A')
+        r1 = move1.CreateRank(loc1, name='A')
 
         rls = song.GetRankLocationsAtCount(8)
 #        print(str(len(rls)))
@@ -165,8 +165,8 @@ class Tester(object):
         move1 = song.GetMoveList()[1]
         loc0 = RankLocation.RankLocation([Point.Point(100, 100), Point.Point(116, 100)])
         loc1 = RankLocation.RankLocation([Point.Point(100, 116), Point.Point(116, 116)])
-        r0 = move0.CreateRank(loc0, 'A')
-        r1 = move1.CreateRank(loc1, 'A')
+        r0 = move0.CreateRank(loc0, name='A')
+        r1 = move1.CreateRank(loc1, name='A')
         song.AddWayPoint(1, 0) #Count 1
         song.AddWayPoint(15, 10000) #Count 57
         print('song.GetTimeDifferenceAtCount(30) = ' + str(song.GetTimeDifferenceAtCount(30)))
